@@ -16,11 +16,11 @@
     <name>project_parent_new</name>
     <url>http://maven.apache.org</url>
     <modules>
-        <module>order-service</module>
-        <module>product-service</module>
+        <module>thongtin-service</module>
+        <module>loptinchi-service</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
-        <module>identity-service</module>
+        <module>thanhtoanhocphi-service</module>
     </modules>
 
     <properties>
