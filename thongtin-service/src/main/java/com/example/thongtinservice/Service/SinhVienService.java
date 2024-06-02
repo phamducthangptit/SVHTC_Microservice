@@ -81,12 +81,12 @@ public class SinhVienService {
     public int xoaSinhVien(String masv){
         try {
             sinhVienRepository.xoaSinhVien(masv);
-
+            return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
-        return 1;
+
     }
 
     public int updateSinhVien(SinhVienDTO sinhVien) {
@@ -129,24 +129,9 @@ public class SinhVienService {
         }
         return 1;
     }
-
-    public int doiMatKhau(String username,String password) {
-
-        try {
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
-            String newPass = encoder.encode(password);
-            sinhVienRepository.doiMatKhau(username,newPass);
-        } catch (DataAccessException dataAccessException) {
-            System.out.println(dataAccessException.getMessage());
-            return 0;
-        }
-        return 1;
-    }
     public SinhVienDTO timSinhVen(String masv)
     {
         return sinhVienRepository.timSinhVien(masv);
     }
-    public Map<String, Object> taiKhoanByEmail(String Email) {
-        return sinhVienRepository.taiKhoanByEMail(Email);
-    }
+
 }

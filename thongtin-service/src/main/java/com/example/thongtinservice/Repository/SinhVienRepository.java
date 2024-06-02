@@ -14,9 +14,7 @@ import java.util.Map;
 public interface SinhVienRepository extends JpaRepository<SinhVien, String> {
     SinhVien findBymasv(String maSV);
     List<SinhVien> findBymalop(Lop maLop);
-
     List<SinhVien> findAll();
-
 
     @Query(value = "{call THONGTIN_SINHVIEN(:MASV)}", nativeQuery = true)
     public Map<String, Object> thongtinSV(@Param("MASV") String masv);
@@ -41,6 +39,8 @@ public interface SinhVienRepository extends JpaRepository<SinhVien, String> {
     void xoaSinhVien(
             @Param("masv") String masv
     );
+
+
 
     @Query(value = "EXEC SP_LOC_MA_LOP", nativeQuery = true)
     List<String> locMaLop();
@@ -69,18 +69,7 @@ public interface SinhVienRepository extends JpaRepository<SinhVien, String> {
             @Param("masv") String masv
 
     );
-
-    @Procedure(procedureName = "SP_DOI_MAT_KHAU")
-    void doiMatKhau(
-            @Param("username") String username,
-            @Param("password") String password
-    );
-
     @Query(value = "EXEC SP_TIM_SINH_VIEN :masv", nativeQuery = true)
     SinhVienDTO timSinhVien(@Param("masv") String masv);
-
-    @Query(value = "EXEC SP_TAI_KHOAN_BY_EMAIL :Email", nativeQuery = true)
-    public Map<String, Object> taiKhoanByEMail(@Param("Email") String Email);
-
 }
 
