@@ -49,7 +49,6 @@ public class SinhVien {
     @JoinColumn(name = "MASV")
     @MapsId
     private TaiKhoan taiKhoan;
-
     @OneToMany(mappedBy = "sinhVien")
     private List<Diem> diem;
 
@@ -94,7 +93,6 @@ public class SinhVien {
     public void setSdt(String sdt) {
         this.sdt = sdt;
     }
-
     public String getMasv() {
         return masv;
     }
