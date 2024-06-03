@@ -1,4 +1,4 @@
-package com.example.loptinchiservice.controller;
+package com.example.thongtinservice.Controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/lop-tin-chi")
-public class LopTinChiController {
+@RequestMapping("/api/thong-tin")
+public class ThongTinController {
     @GetMapping("/test")
     public ResponseEntity<?> test(){
         Map<String, String> tmp = new HashMap<>();
-        tmp.put("title", "Phuong thuc get lop tin chi");
+        tmp.put("title", "Phuong thuc get thong tin");
         return new ResponseEntity<>(tmp, HttpStatus.OK);
     }
 }

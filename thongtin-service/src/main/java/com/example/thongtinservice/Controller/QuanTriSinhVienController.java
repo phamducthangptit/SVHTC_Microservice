@@ -1,4 +1,4 @@
-package com.example.thongtinservice.controller;
+package com.example.thongtinservice.Controller;
 
 import com.example.thongtinservice.DTO.SinhVienDTO;
 import com.example.thongtinservice.Model.SinhVien;
@@ -24,7 +24,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/thong-tin/sinh-vien")
-public class SinhVienController {
+public class QuanTriSinhVienController {
     @Autowired
     SinhVienService sinhVienService;
     private String imgDirectory ="src/main/java/ptithcm/API_QLDSV_TC/Image";
@@ -155,14 +155,14 @@ public class SinhVienController {
         }
     }
 
-    @RequestMapping(value = "/update-sinh-vien", method = RequestMethod.POST)
-    public ResponseEntity<?> updateSinhVien(@Validated @RequestBody SinhVienDTO sinhvien){
-        if(sinhVienService.updateSinhVien(sinhvien) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
+//    @RequestMapping(value = "/update-sinh-vien", method = RequestMethod.POST)
+//    public ResponseEntity<?> updateSinhVien(@Validated @RequestBody SinhVienDTO sinhvien){
+//        if(sinhVienService.updateSinhVien(sinhvien) == 0){
+//            return ResponseEntity.badRequest().build();
+//        } else {
+//            return ResponseEntity.ok().build();
+//        }
+//    }
     @GetMapping("/loc-ma-lop")
     public ResponseEntity<List<String>> locMaLop() {
         try {

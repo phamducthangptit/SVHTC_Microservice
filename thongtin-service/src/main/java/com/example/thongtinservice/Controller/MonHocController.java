@@ -1,6 +1,5 @@
-package com.example.thongtinservice.controller;
+package com.example.thongtinservice.Controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.thongtinservice.DTO.ApiResponse;
-import com.example.thongtinservice.Model.MonHoc;
 import com.example.thongtinservice.Service.MonHocService;
 
 @RestController

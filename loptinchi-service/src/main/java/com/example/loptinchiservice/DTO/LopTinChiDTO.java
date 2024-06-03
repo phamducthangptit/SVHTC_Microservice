@@ -23,7 +23,7 @@ public class LopTinChiDTO {
     public LopTinChiDTO() {
     }
 
-    public LopTinChiDTO(Integer maltc, String makhoa, String nienkhoa, Integer hocki, Integer nhom, Integer sosvtt, Integer sosvtd, String malop, boolean donglop, String mamh, String tenmh, String magv, String tengiangvien) {
+    public LopTinChiDTO(Integer maltc,String makhoa, String nienkhoa, Integer hocki, Integer nhom, Integer sosvtt, Integer sosvtd, String malop, boolean donglop, String mamh,String magv, String tenmh,  String tengiangvien) {
         this.maltc = maltc;
         this.makhoa = makhoa;
         this.nienkhoa = nienkhoa;

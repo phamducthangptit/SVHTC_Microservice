@@ -43,13 +43,17 @@ public interface LopTinChiRepository extends JpaRepository<LopTinChi, Integer> {
             @Param("hocki") int hocKi,
             @Param("makhoa") String maKhoa
     );
-    @Procedure(procedureName = "SP_THEM_LTC")
+    @Procedure(procedureName = "SP_UPDATE_LTC")
     void updateLTC(
             @Param("maltc") int maltc,
             @Param("magv") String magv,
             @Param("nhom") int nhom,
             @Param("sosvtt") int soSVTT,
-            @Param("sosvtd") int soSVTD
+            @Param("sosvtd") int soSVTD,
+            @Param("malop") String malop
     );
-
+    @Procedure(procedureName = "SP_DELETE_LTC")
+    void xoaLTC(
+            @Param("maltc") int maltc
+    );
 }

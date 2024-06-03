@@ -108,10 +108,19 @@ public class LopTinChiService {
             return 0;
         }
     }
-    public int updateLTC(int maltc, String magv, int nhom, int sosvtt,int sosvtd){
+    public int updateLTC(int maltc, String magv, int nhom, int sosvtt,int sosvtd,String malop){
 
         try {
-            lopTinChiRepository.updateLTC(maltc, magv, nhom, sosvtt,sosvtd);
+            lopTinChiRepository.updateLTC(maltc, magv, nhom, sosvtt,sosvtd,malop);
+            return 1;
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+    }
+    public int xoaLTC(int maltc){
+        try {
+            lopTinChiRepository.xoaLTC(maltc);
             return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
