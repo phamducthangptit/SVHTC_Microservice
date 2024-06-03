@@ -1,8 +1,5 @@
 package com.example.loptinchiservice.Repository;
 
-import com.example.loptinchiservice.DTO.LopTinChiDTO;
-import com.example.loptinchiservice.DTO.MonHocDTO;
-import com.example.loptinchiservice.Model.GiangVien;
 import com.example.loptinchiservice.Model.LopTinChi;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -56,4 +53,8 @@ public interface LopTinChiRepository extends JpaRepository<LopTinChi, Integer> {
     void xoaLTC(
             @Param("maltc") int maltc
     );
+    @Query(value = "{call SP_DANH_SACH_LTC_THEO_MAGV(:magv)}", nativeQuery = true)
+    List<Object[]> danhSachLtcTheoMaGV(@Param("magv") String maGV);
+
+
 }

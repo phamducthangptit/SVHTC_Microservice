@@ -27,26 +27,6 @@ import java.util.*;
 public class QuanTriSinhVienController {
     @Autowired
     SinhVienService sinhVienService;
-    private String imgDirectory ="src/main/java/ptithcm/API_QLDSV_TC/Image";
-
-    @RequestMapping(value = "thong-tin-ca-nhan", method = RequestMethod.GET)
-    public ResponseEntity<SinhVien> thongTinCaNhan(@RequestParam("ma-sv") String maSV){
-        SinhVien sv = sinhVienService.sinhVienTheoMa(maSV);
-        if(sv != null){
-            return ResponseEntity.ok(sv);
-        }
-        return ResponseEntity.badRequest().build();
-    }
-    @GetMapping("/tim-sinh-vien")
-    public ResponseEntity<SinhVienDTO> timSinhVien(@RequestParam("ma-sv") String masv) {
-        SinhVien sv = sinhVienService.sinhVienTheoMa(masv);
-
-        SinhVienDTO sinhVienDTO = (new SinhVienDTO(sv.getMasv(), sv.getHo(), sv.getTen(),sv.getPhai(),sv.getDiachi(),sv.getNgaysinh(),sv.getMalop().getMalop(),sv.getDanghihoc(),sv.getSdt(),sv.getHinhanh(),sv.getEmail()));
-
-        return  ResponseEntity.ok(sinhVienDTO);
-    }
-
-
 
     @GetMapping("/danh-sach-sv-lop")
     public ResponseEntity<List<SinhVienDTO>> danhSachSVLop(@RequestParam("ma-lop") String malop) {

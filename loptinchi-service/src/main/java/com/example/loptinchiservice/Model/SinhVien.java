@@ -1,5 +1,4 @@
 package com.example.loptinchiservice.Model;
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
@@ -18,14 +17,9 @@ public class SinhVien {
     @Nationalized
     @Column(name = "TEN", nullable = false, length = 10)
     private String ten;
-
-
-
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "MALOP", nullable = false)
     private Lop malop;
-
-
 
 
     public SinhVien() {
@@ -63,3 +57,4 @@ public class SinhVien {
         this.malop = malop;
     }
 }
+
