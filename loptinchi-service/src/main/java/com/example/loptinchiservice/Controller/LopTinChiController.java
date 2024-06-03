@@ -1,5 +1,4 @@
 package com.example.loptinchiservice.Controller;
-
 import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
 import com.example.loptinchiservice.ResponseDTO.SinhVienLtcResponse;
 import com.example.loptinchiservice.Service.LopTinChiService;
@@ -9,9 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
