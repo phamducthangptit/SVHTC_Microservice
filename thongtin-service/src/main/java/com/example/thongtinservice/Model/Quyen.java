@@ -17,10 +17,9 @@ public class Quyen {
 
     @OneToMany(mappedBy = "quyen",fetch = FetchType.LAZY)
     private List<TaiKhoan> taiKhoan;
+
     public Quyen() {
     }
-
-
     public Quyen(Integer idQuyen, String tenQuyen) {
         this.idQuyen = idQuyen;
         this.tenQuyen = tenQuyen;

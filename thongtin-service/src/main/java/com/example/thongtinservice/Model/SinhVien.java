@@ -2,6 +2,7 @@ package com.example.thongtinservice.Model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
+import java.util.List;
 
 @Entity
 @Table(name = "SINHVIEN")
@@ -36,7 +37,6 @@ public class SinhVien {
     @Column(name = "DANGHIHOC", nullable = false)
     private Boolean danghihoc = false;
 
-
     @Column(name = "SDT")
     private String sdt;
 
@@ -49,11 +49,14 @@ public class SinhVien {
     @JoinColumn(name = "MASV")
     @MapsId
     private TaiKhoan taiKhoan;
+    @OneToMany(mappedBy = "sinhVien")
+    private List<Diem> diem;
 
     public SinhVien() {
     }
 
-    public SinhVien(String masv, String ho, String ten, Boolean phai, String diachi, String ngaysinh, Lop malop, Boolean danghihoc, String sdt, String hinhanh, String email) {
+    public SinhVien(String masv, String ho, String ten, Boolean phai, String diachi, String ngaysinh, Lop malop,
+            Boolean danghihoc, String sdt, String hinhanh, String email) {
         this.masv = masv;
         this.ho = ho;
         this.ten = ten;
@@ -83,7 +86,6 @@ public class SinhVien {
         this.email = email;
     }
 
-
     public String getSdt() {
         return sdt;
     }
@@ -91,8 +93,6 @@ public class SinhVien {
     public void setSdt(String sdt) {
         this.sdt = sdt;
     }
-
-
     public String getMasv() {
         return masv;
     }
@@ -157,5 +157,11 @@ public class SinhVien {
         return hinhanh;
     }
 
+    public void setDanghihoc(Boolean danghihoc) {
+        this.danghihoc = danghihoc;
+    }
 
+    public void setHinhanh(String hinhanh) {
+        this.hinhanh = hinhanh;
+    }
 }

@@ -9,7 +9,6 @@ public class TaiKhoan {
     @Column(name = "USERNAME")
     private String username;
 
-
     @Column(name = "PASSWORD")
     private String password;
 
@@ -21,7 +20,7 @@ public class TaiKhoan {
     private Quyen quyen;
 
 
-    @OneToOne(mappedBy = "taiKhoan",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "taiKhoan", fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private SinhVien sinhVien;
 
