@@ -4,15 +4,19 @@ public class GiangVienDTO {
     private String magv;
     private String ho;
     private String ten;
-    private  String hocham;
+    private String hocham;
     private String hocvi;
     private String chuyenmon;
     private String sdt;
     private String hinhanh;
     private String email;
     private String makhoa;
-    public GiangVienDTO(){}
-    public GiangVienDTO(String magv, String ho, String ten, String hocham, String hocvi, String chuyenmon, String sdt, String hinhanh, String email, String makhoa) {
+
+    public GiangVienDTO() {
+    }
+
+    public GiangVienDTO(String magv, String ho, String ten, String hocham, String hocvi, String chuyenmon, String sdt,
+            String hinhanh, String email, String makhoa) {
         this.magv = magv;
         this.ho = ho;
         this.ten = ten;

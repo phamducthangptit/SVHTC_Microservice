@@ -24,4 +24,3 @@ public class LopTinChiResponse {
     @JsonProperty("TENMH")
     private String tenMH;
 }
-
