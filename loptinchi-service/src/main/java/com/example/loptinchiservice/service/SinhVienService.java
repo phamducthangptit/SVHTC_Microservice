@@ -1,7 +1,8 @@
 package com.example.loptinchiservice.Service;
 
 import com.example.loptinchiservice.Repository.SinhVienRepository;
-import com.example.loptinchiservice.responsedto.SinhVienLtcResponse;
+import com.example.loptinchiservice.Responsedto.SinhVienLtcResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

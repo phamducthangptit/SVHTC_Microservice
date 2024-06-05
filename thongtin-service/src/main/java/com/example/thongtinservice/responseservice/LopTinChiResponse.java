@@ -1,4 +1,4 @@
-package com.example.thongtinservice.responseservice;
+package com.example.thongtinservice.Responseservice;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -24,4 +24,3 @@ public class LopTinChiResponse {
     @JsonProperty("TENMH")
     private String tenMH;
 }
-

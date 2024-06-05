@@ -1,5 +1,4 @@
-package com.example.thongtinservice.config;
-
+package com.example.thongtinservice.Config;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigCustomizer;
@@ -19,7 +18,6 @@ public class Resilience4jConfig {
                         .failureRateThreshold(50)
                         .waitDurationInOpenState(Duration.ofSeconds(5))
                         .permittedNumberOfCallsInHalfOpenState(3)
-                        .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED)
-                );
+                        .slidingWindowType(CircuitBreakerConfig.SlidingWindowType.COUNT_BASED));
     }
 }

@@ -1,7 +1,7 @@
-package com.example.loptinchiservice.controller;
+package com.example.loptinchiservice.Controller;
 
-import com.example.loptinchiservice.responsedto.LopTinChiResponse;
-import com.example.loptinchiservice.responsedto.SinhVienLtcResponse;
+import com.example.loptinchiservice.Responsedto.LopTinChiResponse;
+import com.example.loptinchiservice.Responsedto.SinhVienLtcResponse;
 import com.example.loptinchiservice.Service.LopTinChiService;
 import com.example.loptinchiservice.Service.SinhVienService;
 import org.springframework.beans.factory.annotation.Autowired;

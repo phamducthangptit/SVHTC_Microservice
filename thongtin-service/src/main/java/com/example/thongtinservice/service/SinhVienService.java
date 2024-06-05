@@ -1,8 +1,9 @@
 package com.example.thongtinservice.Service;
 
 import com.example.thongtinservice.Repository.SinhVienRepository;
-import com.example.thongtinservice.responsedto.DiemResponse;
-import com.example.thongtinservice.responsedto.NienKhoaHocKi;
+import com.example.thongtinservice.Responsedto.DiemResponse;
+import com.example.thongtinservice.Responsedto.NienKhoaHocKi;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

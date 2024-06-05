@@ -23,14 +23,14 @@ public interface LopRepository extends JpaRepository<Lop, String> {
         List<Map<String, Object>> findListLop(@Param("search") String search);
 
         @Procedure(procedureName = "SP_DELETE_LOP")
-        void deleteMonHoc(@Param("malop") String mamh);
+        void deleteLopHoc(@Param("malop") String malop);
 
         @Procedure(procedureName = "SP_INSERT_LOP")
         void insertLop(@Param("malop") String malop,
-                        @Param("tenlop") String tenmh,
-                        @Param("khoahoc") int sotlt,
-                        @Param("makhoa") int sotth,
-                        @Param("idhe") int sotc,
+                        @Param("tenlop") String tenlop,
+                        @Param("khoahoc") String khoahoc,
+                        @Param("makhoa") String makhoa,
+                        @Param("idhe") int idhe,
                         @Param("trangthai") boolean trangThai);
 
         // call sp kiểm tra môn học có tồn tại hay không?
@@ -42,11 +42,11 @@ public interface LopRepository extends JpaRepository<Lop, String> {
         Integer kiemTraXoaLop(@Param("MALOP") String malop);
 
         @Procedure(procedureName = "SP_UPDATE_LOP")
-        void updateLop(@Param("malop") String mamh,
-                        @Param("tenlop") String tenmh,
-                        @Param("khoahoc") int sotlt,
-                        @Param("makhoa") int sotth,
-                        @Param("idhe") int sotc,
+        void updateLop(@Param("malop") String malop,
+                        @Param("tenlop") String tenlop,
+                        @Param("khoahoc") String khoahoc,
+                        @Param("makhoa") String makhoa,
+                        @Param("idhe") int idhe,
                         @Param("trangthai") boolean trangThai);
 
         @Query(value = "{call SP_DANH_SACH_LOP_CUA_KHOA(:magv, :trangthai)}", nativeQuery = true)

@@ -1,4 +1,4 @@
-package com.example.loptinchiservice.responsedto;
+package com.example.loptinchiservice.Responsedto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

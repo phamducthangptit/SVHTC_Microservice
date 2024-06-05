@@ -1,6 +1,5 @@
 package com.example.thongtinservice.Service;
 
-import com.example.thongtinservice.responseservice.LopTinChiResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -9,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.example.thongtinservice.Responseservice.LopTinChiResponse;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.thongtinservice.DTO.ApiResponse;
 import com.example.thongtinservice.DTO.LopDTO;
 import com.example.thongtinservice.Model.Lop;
-
+import com.example.thongtinservice.Model.MonHoc;
 import com.example.thongtinservice.Repository.LopRepository;
 
 @Service
@@ -64,6 +64,33 @@ public class LopService {
             dsLopDTO.add(dto);
         }
         return new ApiResponse<List<LopDTO>>(200, "Lấy danh sách lớp học thành công!", dsLopDTO);
+    }
+
+    public ApiResponse themLop(Map<String, Object> data) {
+        Integer kiemTraTrung = lopRepository.kiemTraLop((String) data.get("maLop"));
+        if (kiemTraTrung == 1) {
+            return new ApiResponse<>(203, "Lớp học đã tồn tại", null);
+        }
+        // System.out.println("Check mon hoc");
+        // System.out.println(kiemTraTrung);
+        lopRepository.insertLop((String) data.get("maLop"), (String) data.get("tenLop"), (String) data.get("khoaHoc"),
+                (String) data.get("maKhoa"), (Integer) data.get("idHe"), (Boolean) data.get("trangThai"));
+        return new ApiResponse<>(200, "Thêm mới môn học thành công", null);
+    }
+
+    public ApiResponse updateLopHoc(Map<String, Object> data) {
+        lopRepository.updateLop((String) data.get("maLop"), (String) data.get("tenLop"), (String) data.get("khoaHoc"),
+                (String) data.get("maKhoa"), (Integer) data.get("idHe"), (Boolean) data.get("trangThai"));
+        return new ApiResponse<Object>(200, "Cập nhật môn học thành công", null);
+    }
+
+    public ApiResponse deleteLopHoc(String maLop) {
+        Integer kiemTraXoaLop = lopRepository.kiemTraXoaLop(maLop);
+        if (kiemTraXoaLop == 1) {
+            return new ApiResponse<Object>(203, "Môn học đang được giảng dạy không thể xoá!", null);
+        }
+        lopRepository.deleteLopHoc(maLop);
+        return new ApiResponse<>(200, "Xoá môn học thành công", null);
     }
 
     public List<Lop> getAllLop() {

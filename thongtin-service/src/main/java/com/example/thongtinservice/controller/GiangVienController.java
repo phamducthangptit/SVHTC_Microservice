@@ -1,6 +1,6 @@
-package com.example.thongtinservice.controller;
+package com.example.thongtinservice.Controller;
 
-import com.example.thongtinservice.responseservice.LopTinChiResponse;
+import com.example.thongtinservice.Responseservice.LopTinChiResponse;
 import com.example.thongtinservice.Service.NhapDiemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
