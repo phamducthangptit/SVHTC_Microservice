@@ -13,11 +13,11 @@ public class SinhVienService {
     @Autowired
     private SinhVienRepository repository;
 
-    public List<SinhVienLtcResponse> danhSachSinhVienLtc(int maLTC){
+    public List<SinhVienLtcResponse> danhSachSinhVienLtc(int maLTC) {
         List<Object[]> resultCallSp = repository.danhSachLtcTheoMaGV(maLTC);
-        if(!resultCallSp.isEmpty()){
+        if (!resultCallSp.isEmpty()) {
             List<SinhVienLtcResponse> result = new ArrayList<>();
-            for(Object[] re : resultCallSp){
+            for (Object[] re : resultCallSp) {
                 SinhVienLtcResponse sinhVienLtcResponse = new SinhVienLtcResponse();
                 sinhVienLtcResponse.setMaSV((String) re[0]);
                 sinhVienLtcResponse.setHo((String) re[1]);
