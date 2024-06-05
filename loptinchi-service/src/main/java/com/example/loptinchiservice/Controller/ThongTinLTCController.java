@@ -3,7 +3,11 @@ package com.example.loptinchiservice.Controller;
 import com.example.loptinchiservice.DTO.GiangVienDTO;
 import com.example.loptinchiservice.DTO.LopTinChiDTO;
 import com.example.loptinchiservice.DTO.MonHocDTO;
+import com.example.loptinchiservice.DTO.SinhVienDTO;
+import com.example.loptinchiservice.Repository.GiangVienRepo;
+import com.example.loptinchiservice.Service.GiangVienService;
 import com.example.loptinchiservice.Service.LopTinChiService;
+import com.example.loptinchiservice.Service.SinhVienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,10 @@ import java.util.List;
 public class ThongTinLTCController {
     @Autowired
     LopTinChiService lopTinChiService;
+    @Autowired
+    SinhVienService sinhVienService;
+    @Autowired
+    GiangVienService giangVienService;
     @GetMapping("/loc-ma-khoa")
     public ResponseEntity<List<String>> locMaKhoa() {
         try {
@@ -90,6 +98,55 @@ public class ThongTinLTCController {
         if(x == 1)
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/them-sv", method = RequestMethod.POST)
+    public ResponseEntity<?> themSV(@Validated @RequestBody SinhVienDTO sv){
+        if(sinhVienService.themSV(sv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+    @RequestMapping(value = "/update-sv", method = RequestMethod.POST)
+    public ResponseEntity<?> updateSV(@Validated @RequestBody SinhVienDTO sv){
+        if(sinhVienService.updateSV(sv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+    @RequestMapping(value = "/xoa-sv", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaSV(@Validated @RequestParam("masv") String masv){
+        if(sinhVienService.xoaSV(masv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+    @RequestMapping(value = "/them-gv", method = RequestMethod.POST)
+    public ResponseEntity<?> themGV(@Validated @RequestBody GiangVienDTO gv){
+        if(giangVienService.themGV(gv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+    @RequestMapping(value = "/update-gv", method = RequestMethod.POST)
+    public ResponseEntity<?> updateGV(@Validated @RequestBody GiangVienDTO gv){
+        if(giangVienService.updateGV(gv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+    @RequestMapping(value = "/xoa-gv", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaGV(@Validated @RequestParam("magv") String magv){
+        if(giangVienService.xoaGV(magv) == 0){
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
     }
 }
 

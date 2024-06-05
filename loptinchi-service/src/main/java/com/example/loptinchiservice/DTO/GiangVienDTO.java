@@ -4,14 +4,15 @@ public class GiangVienDTO {
     private String magv;
     private String ho;
     private String ten;
-    public GiangVienDTO(){
-
+    private String makhoa;
+    public GiangVienDTO() {
     }
 
-    public GiangVienDTO(String magv, String ho, String ten) {
+    public GiangVienDTO(String magv, String ho, String ten, String makhoa) {
         this.magv = magv;
         this.ho = ho;
         this.ten = ten;
+        this.makhoa = makhoa;
     }
 
     public String getMagv() {
@@ -36,5 +37,13 @@ public class GiangVienDTO {
 
     public void setTen(String ten) {
         this.ten = ten;
+    }
+
+    public String getMakhoa() {
+        return makhoa;
+    }
+
+    public void setMakhoa(String makhoa) {
+        this.makhoa = makhoa;
     }
 }

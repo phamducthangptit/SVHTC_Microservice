@@ -1,6 +1,7 @@
 package com.example.loptinchiservice.Repository;
 
 import com.example.loptinchiservice.Model.LopTinChi;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -8,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
-
+@Transactional
 public interface LopTinChiRepository extends JpaRepository<LopTinChi, Integer> {
 
     @Query(value = "EXEC SP_LOC_MA_KHOA", nativeQuery = true)
