@@ -1,78 +1,137 @@
 package com.example.thongtinservice.Service;
 
+import com.example.thongtinservice.DTO.SinhVienDTO;
+import com.example.thongtinservice.Model.SinhVien;
 import com.example.thongtinservice.Repository.SinhVienRepository;
-import com.example.thongtinservice.Responsedto.DiemResponse;
-import com.example.thongtinservice.Responsedto.NienKhoaHocKi;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class SinhVienService {
     @Autowired
-    private SinhVienRepository repository;
+    SinhVienRepository sinhVienRepository;
 
-    public Map<String, ?> thongTinCaNhanSV(String maSV) {
-        return repository.thongTinCaNhanSinhVien(maSV);
+
+    // Lay danh sach sinh vien
+    public List<SinhVien> findAll() {
+        return sinhVienRepository.findAll();
     }
 
-    public List<NienKhoaHocKi> getNienKhoaHocKi(String maSV) {
-        List<NienKhoaHocKi> listNienKhoaHocKi = new ArrayList<>();
-        List<Object[]> resultCallSp = repository.getNienKhoaHocKi(maSV);
-        for (Object[] result : resultCallSp) {
-            NienKhoaHocKi nienKhoaHocKi = new NienKhoaHocKi();
-            nienKhoaHocKi.setNienKhoa((String) result[0]);
-            nienKhoaHocKi.setHocKi((int) result[1]);
-            listNienKhoaHocKi.add(nienKhoaHocKi);
+
+    public Map<String, Object> thongtinSV(String masv){
+        return sinhVienRepository.thongtinSV(masv);
+    }
+
+    // Lay thong tin sinh vien
+    public Optional<SinhVien> findById(String id) {
+        return sinhVienRepository.findById(id);
+    }
+
+    // Luu va sua thong tin sinh vien
+    public SinhVien save(SinhVien sinhVien) {
+        return sinhVienRepository.save(sinhVien);
+    }
+
+    // Xoa sinh vien
+    public void deleteById(String id) {
+        sinhVienRepository.deleteById(id);
+    }
+
+    // Kiem tra ton tai
+    public boolean existsById(String id) {
+        return sinhVienRepository.existsById(id);
+    }
+    public SinhVien sinhVienTheoMa(String maSV){
+        return sinhVienRepository.findBymasv(maSV);
+    }
+
+
+    public int themSinhVienMoi(SinhVienDTO sinhVien, String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String newPass = encoder.encode(password);
+        try {
+            sinhVienRepository.themSinhVienMoi(
+                    sinhVien.getMasv(),
+                    sinhVien.getHo(),
+                    sinhVien.getTen(),
+                    sinhVien.getNgaysinh(),
+                    sinhVien.getPhai(),
+                    sinhVien.getSdt(),
+                    sinhVien.getDiachi(),
+                    sinhVien.getMalop(),
+                    false,
+                    sinhVien.getHinhanh(),
+                    sinhVien.getMasv().trim()+"@student.ptithcm.edu.vn",
+                    newPass
+            );
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
         }
-        return listNienKhoaHocKi;
+        return 1;
     }
 
-    public List<List<DiemResponse>> xemDiem(String maSV) {
-        List<NienKhoaHocKi> listNienKhoaHocKi = getNienKhoaHocKi(maSV);
-        if (!listNienKhoaHocKi.isEmpty()) {
-            List<Object[]> resultCallSp = repository.xemDiem(maSV);
-            List<DiemResponse> listDiem = new ArrayList<>(); // danh sach tat ca diem
-            List<List<DiemResponse>> listDiemLoc = new ArrayList<>();
-            for (Object[] result : resultCallSp) {
-                DiemResponse diemResponse = getDiemResponse(result);
-                listDiem.add(diemResponse);
-            }
-            // loc theo tung nienkhoa hocki
-            for (NienKhoaHocKi nienKhoaHocKi : listNienKhoaHocKi) {
-                List<DiemResponse> listDiemTmp = new ArrayList<>();
-                for (DiemResponse diemResponse : listDiem) {
-                    if (diemResponse.getNienKhoa().equals(nienKhoaHocKi.getNienKhoa())
-                            && (diemResponse.getHocKi() == nienKhoaHocKi.getHocKi())) {
-                        listDiemTmp.add(diemResponse);
-                    }
-                }
-                listDiemLoc.add(listDiemTmp);
-            }
-            return listDiemLoc;
+    public int xoaSinhVien(String masv){
+        try {
+            sinhVienRepository.xoaSinhVien(masv);
+            return 1;
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
         }
-        return null;
+
     }
 
-    private static DiemResponse getDiemResponse(Object[] result) {
-        DiemResponse diemResponse = new DiemResponse();
-        diemResponse.setNienKhoa((String) result[0]);
-        diemResponse.setHocKi((int) result[1]);
-        diemResponse.setMaMH((String) result[2]);
-        diemResponse.setTenMH((String) result[3]);
-        diemResponse.setSoTC((int) result[4]);
-        diemResponse.setDiemCC((int) result[5]);
-        diemResponse.setDiemGK((double) result[6]);
-        diemResponse.setDiemCK((double) result[7]);
-
-        // tinh diem tk
-        diemResponse.setDiemTK10(
-                diemResponse.getDiemCC() * 0.1 + diemResponse.getDiemGK() * 0.3 + diemResponse.getDiemCK() * 0.6);
-        diemResponse.setDiemTK4VaDiemTKC(diemResponse.getDiemTK10());
-        return diemResponse;
+    public int updateSinhVien(SinhVienDTO sinhVien) {
+        System.out.println(sinhVien.toString());
+        try {
+            sinhVienRepository.updateSinhVien(
+                    sinhVien.getMasv(),
+                    sinhVien.getHo(),
+                    sinhVien.getTen(),
+                    sinhVien.getNgaysinh(),
+                    sinhVien.getPhai(),
+                    sinhVien.getSdt(),
+                    sinhVien.getDiachi(),
+                    sinhVien.getMalop(),
+                    sinhVien.getDanghihoc(),
+                    sinhVien.getHinhanh(),
+                    sinhVien.getEmail()
+            );
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+        return 1;
     }
+    public List<SinhVien> danhSachSVMaLop(String malop){
+
+        return  sinhVienRepository.danhSachSinhVien(malop);
+    }
+    public List<String> locMaLop()
+    {
+        return sinhVienRepository.locMaLop();
+    }
+    public int updateDaNghiHoc(String masv) {
+
+        try {
+            sinhVienRepository.updateDaNghiHoc(masv);
+        } catch (DataAccessException dataAccessException) {
+            System.out.println(dataAccessException.getMessage());
+            return 0;
+        }
+        return 1;
+    }
+    public SinhVienDTO timSinhVen(String masv)
+    {
+        return sinhVienRepository.timSinhVien(masv);
+    }
+
 }

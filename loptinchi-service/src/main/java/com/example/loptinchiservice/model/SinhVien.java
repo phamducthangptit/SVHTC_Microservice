@@ -1,16 +1,10 @@
 package com.example.loptinchiservice.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
-@Data
 @Entity
 @Table(name = "SINHVIEN")
-@AllArgsConstructor
-@NoArgsConstructor
 public class SinhVien {
     @Id
     @Nationalized
@@ -25,7 +19,47 @@ public class SinhVien {
     @Column(name = "TEN", nullable = false, length = 10)
     private String ten;
 
+
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "MALOP", nullable = false)
     private Lop malop;
+
+
+
+
+    public SinhVien() {
+    }
+
+    public String getMasv() {
+        return masv;
+    }
+
+    public void setMasv(String masv) {
+        this.masv = masv;
+    }
+
+    public String getHo() {
+        return ho;
+    }
+
+    public void setHo(String ho) {
+        this.ho = ho;
+    }
+
+    public String getTen() {
+        return ten;
+    }
+
+    public void setTen(String ten) {
+        this.ten = ten;
+    }
+
+    public Lop getMalop() {
+        return malop;
+    }
+
+    public void setMalop(Lop malop) {
+        this.malop = malop;
+    }
 }

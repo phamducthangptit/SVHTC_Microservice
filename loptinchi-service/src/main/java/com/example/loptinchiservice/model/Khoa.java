@@ -4,15 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Nationalized;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "KHOA")
 public class Khoa {
     @Id
@@ -23,4 +17,21 @@ public class Khoa {
     @Nationalized
     @Column(name = "TENKHOA", nullable = false, length = 50)
     private String tenkhoa;
+
+    public String getMakhoa() {
+        return makhoa;
+    }
+
+    public void setMakhoa(String makhoa) {
+        this.makhoa = makhoa;
+    }
+
+    public String getTenkhoa() {
+        return tenkhoa;
+    }
+
+    public void setTenkhoa(String tenkhoa) {
+        this.tenkhoa = tenkhoa;
+    }
+
 }

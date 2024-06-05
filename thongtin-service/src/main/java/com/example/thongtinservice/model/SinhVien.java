@@ -2,6 +2,7 @@ package com.example.thongtinservice.Model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
+import java.util.List;
 
 @Entity
 @Table(name = "SINHVIEN")
@@ -48,6 +49,9 @@ public class SinhVien {
     @JoinColumn(name = "MASV")
     @MapsId
     private TaiKhoan taiKhoan;
+
+    @OneToMany(mappedBy = "sinhVien")
+    private List<Diem> diem;
 
     public SinhVien() {
     }
@@ -155,4 +159,11 @@ public class SinhVien {
         return hinhanh;
     }
 
+    public void setDanghihoc(Boolean danghihoc) {
+        this.danghihoc = danghihoc;
+    }
+
+    public void setHinhanh(String hinhanh) {
+        this.hinhanh = hinhanh;
+    }
 }
