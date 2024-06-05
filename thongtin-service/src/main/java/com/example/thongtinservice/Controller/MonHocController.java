@@ -42,7 +42,7 @@ public class MonHocController {
         System.out.println("Token: " + token);
         // System.out.print("check data them mon hoc: ");
         // System.out.println(monHoc.toString());
-        return monHocService.insertMonHoc(monHoc);
+        return monHocService.insertMonHoc(monHoc, token);
     }
 
     @PostMapping("chinh-sua-mon-hoc")

@@ -1,12 +1,23 @@
 package com.example.thongtinservice.Service;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.example.thongtinservice.DTO.ApiResponse;
 import com.example.thongtinservice.DTO.MonHocDTO;
 import com.example.thongtinservice.Model.MonHoc;
 import com.example.thongtinservice.Repository.MonHocRepository;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import reactor.core.publisher.Mono;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +27,13 @@ import java.util.List;
  */
 @Service
 public class MonHocService {
+    private static final Logger logger = LoggerFactory.getLogger(ApiResponse.class);
+
     @Autowired
     private MonHocRepository monHocRepository;
+
+    @Autowired
+    private WebClient.Builder webClient;
 
     public ApiResponse getSizeListMonHoc() {
         Integer dsMonHoc = monHocRepository.getSizeListMonHoc();
@@ -55,19 +71,29 @@ public class MonHocService {
         return new ApiResponse<List<MonHocDTO>>(200, "Lấy danh sách môn học thành công!", dsMonHocDTO);
     }
 
-    public ApiResponse insertMonHoc(MonHoc monHoc) {
+    @CircuitBreaker(name = "insertMonHoc", fallbackMethod = "fallbackInsertMonHoc")
+    public ApiResponse insertMonHoc(MonHoc monHoc, String token) {
         Integer kiemTraTrung = monHocRepository.kiemTraMonHoc(monHoc.getMaMH());
         if (kiemTraTrung == 1) {
-            return new ApiResponse<Object>(203, "Môn học đã tồn tại", null);
+            return new ApiResponse<>(203, "Môn học đã tồn tại", null);
         }
-        // System.out.println("Check mon hoc");
-        // System.out.println(kiemTraTrung);
+
         monHocRepository.insertMonHoc(monHoc.getMaMH(),
                 monHoc.getTenMH(),
                 monHoc.getSoTietLT(),
                 monHoc.getSoTietTH(),
                 monHoc.getSoTinChi());
-        return new ApiResponse<Object>(200, "Thêm mới môn học thành công", null);
+
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-mon-hoc")
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .body(Mono.just(monHoc), MonHoc.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        System.out.println("check:" + result.toString());
+
+        return new ApiResponse<>(200, "Thêm mới môn học thành công", null);
     }
 
     public ApiResponse updateMonHoc(MonHoc monHoc) {
@@ -86,6 +112,11 @@ public class MonHocService {
         }
         monHocRepository.deleteMonHoc(maMH);
         return new ApiResponse<Object>(200, "Xoá môn học thành công", null);
+    }
+
+    public ApiResponse fallbackInsertMonHoc(MonHoc monHoc, String token, Throwable t) {
+        logger.error("Fallback triggered for monHoc={} due to: {}", monHoc.toString(), t.getMessage());
+        return new ApiResponse<>(300, "Lưu môn học thất bại!", null);
     }
 
 }
