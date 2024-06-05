@@ -1,4 +1,4 @@
-package com.example.thongtinservice.Responseservice;
+package com.example.thongtinservice.RequestDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LopTinChiResponse {
-    @JsonProperty("MALTC")
-    private int maLTC;
+public class DiemRequest {
+    @JsonProperty("MASV")
+    private String maSv;
 
     @JsonProperty("NIENKHOA")
     private String nienKhoa;
@@ -21,6 +21,15 @@ public class LopTinChiResponse {
     @JsonProperty("MAMH")
     private String maMH;
 
-    @JsonProperty("TENMH")
-    private String tenMH;
+    @JsonProperty("MAGV")
+    private String maGv;
+
+    @JsonProperty("DIEMCC")
+    private int diemCC;
+
+    @JsonProperty("DIEMGK")
+    private float diemGK;
+
+    @JsonProperty("DIEMCK")
+    private float diemCK;
 }

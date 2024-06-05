@@ -1,5 +1,4 @@
 package com.example.loptinchiservice.Model;
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
@@ -113,3 +112,4 @@ public class LopTinChi {
     }
 
 }
+

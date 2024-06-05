@@ -1,7 +1,6 @@
 package com.example.thongtinservice.Model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;

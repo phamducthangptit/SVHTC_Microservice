@@ -15,12 +15,11 @@ public class Quyen {
     @Column(name = "TENQUYEN")
     private String tenQuyen;
 
-    @OneToMany(mappedBy = "quyen", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "quyen",fetch = FetchType.LAZY)
     private List<TaiKhoan> taiKhoan;
 
     public Quyen() {
     }
-
     public Quyen(Integer idQuyen, String tenQuyen) {
         this.idQuyen = idQuyen;
         this.tenQuyen = tenQuyen;

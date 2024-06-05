@@ -3,7 +3,7 @@ package com.example.thongtinservice.Model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "TAIKHOAN")
+@Table(name="TAIKHOAN")
 public class TaiKhoan {
     @Id
     @Column(name = "USERNAME")
@@ -18,6 +18,7 @@ public class TaiKhoan {
     @ManyToOne
     @JoinColumn(name = "IDQUYEN")
     private Quyen quyen;
+
 
     @OneToOne(mappedBy = "taiKhoan", fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn

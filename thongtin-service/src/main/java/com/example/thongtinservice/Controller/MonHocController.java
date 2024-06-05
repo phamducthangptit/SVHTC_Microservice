@@ -1,6 +1,5 @@
 package com.example.thongtinservice.Controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +28,7 @@ public class MonHocController {
     @GetMapping("danh-sach-mon-hoc")
     public ApiResponse getListMonHoc(@RequestParam("start") int start,
             @RequestParam("size") int size) {
-       
+
         return monHocService.getListMonHoc(start, size);
     }
 
@@ -47,14 +46,16 @@ public class MonHocController {
     }
 
     @PostMapping("chinh-sua-mon-hoc")
-    public ApiResponse chinhSuaMonHoc(@RequestBody MonHoc monHoc , @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ApiResponse chinhSuaMonHoc(@RequestBody MonHoc monHoc,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.print("check data chinh sua mon hoc: ");
         System.out.println(monHoc.toString());
         return monHocService.updateMonHoc(monHoc);
     }
 
     @GetMapping("xoa-mon-hoc")
-    public ApiResponse xoaMonHoc(@RequestParam("mamh") String mamh , @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    public ApiResponse xoaMonHoc(@RequestParam("mamh") String mamh,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         return monHocService.deleteMonHoc(mamh);
     }
 

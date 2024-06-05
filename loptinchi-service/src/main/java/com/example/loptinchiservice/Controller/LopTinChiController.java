@@ -1,7 +1,7 @@
 package com.example.loptinchiservice.Controller;
 
-import com.example.loptinchiservice.Responsedto.LopTinChiResponse;
-import com.example.loptinchiservice.Responsedto.SinhVienLtcResponse;
+import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
+import com.example.loptinchiservice.ResponseDTO.SinhVienLtcResponse;
 import com.example.loptinchiservice.Service.LopTinChiService;
 import com.example.loptinchiservice.Service.SinhVienService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @RestController
@@ -33,7 +35,7 @@ public class LopTinChiController {
     }
 
     @GetMapping("/danh-sach-sinh-vien")
-    public ResponseEntity<?> danhSachSinhVienLTC(@RequestParam("maltc") int maLTC) {
+    public ResponseEntity<?> danhSachSinhVienLTC(@RequestParam("ma-ltc") int maLTC) {
         List<SinhVienLtcResponse> result = sinhVienService.danhSachSinhVienLtc(maLTC);
         if (result == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

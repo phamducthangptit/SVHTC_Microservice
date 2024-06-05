@@ -1,4 +1,4 @@
-package com.example.thongtinservice.Responsedto;
+package com.example.thongtinservice.ResponseDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DiemResponse {
+public class DiemTongKetResponse {
     @JsonProperty("NIENKHOA")
     private String nienKhoa;
 

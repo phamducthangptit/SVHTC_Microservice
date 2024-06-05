@@ -1,6 +1,7 @@
 package com.example.loptinchiservice.Model;
 
 import jakarta.persistence.*;
+
 import org.hibernate.annotations.Nationalized;
 
 @Entity
@@ -49,3 +50,6 @@ public class Lop {
         this.makhoa = makhoa;
     }
 }
+
+
+
