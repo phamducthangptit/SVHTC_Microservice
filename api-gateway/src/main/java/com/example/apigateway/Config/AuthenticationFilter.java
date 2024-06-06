@@ -38,7 +38,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     private String[] publicEndpoints = {
             "user/login",
             "user/valid",
-            "user/quen-mat-khau",
+            "user/quen-mat-khau"
     };
 
     private String apiPrefix = "/api/";
