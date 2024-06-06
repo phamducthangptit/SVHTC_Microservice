@@ -19,7 +19,6 @@ public interface GiangVienRepository extends JpaRepository<GiangVien, String> {
                     @Param("nienkhoa") String nienKhoa,
                     @Param("hocki") int hocKi,
                     @Param("mamh") String maMH,
-                    @Param("magv") String maGv,
                     @Param("diemcc") int diemCC,
                     @Param("diemgk") float diemGK,
                     @Param("diemck") float diemCK);
