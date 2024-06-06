@@ -76,7 +76,7 @@ public class QTGiangVienService {
         }
         return 1;
     }
-    public int fallbackDeleteGV(String masv,Throwable t) {
+    public int fallbackDeleteGV(String magv,Throwable t) {
         return 0;
     }
     @CircuitBreaker(name = "updateGV", fallbackMethod = "fallbackUpdateGV")
@@ -110,7 +110,7 @@ public class QTGiangVienService {
         }
         return 1;
     }
-    public int fallbackUpdateGV(GiangVienDTO giangVien, String password,Throwable t) {
+    public int fallbackUpdateGV(GiangVienDTO giangVien, Throwable t) {
         return 0;
     }
     public GiangVienDTO mapGVDTO (Map<String , Object> gv)

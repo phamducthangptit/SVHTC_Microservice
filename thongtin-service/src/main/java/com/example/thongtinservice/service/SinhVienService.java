@@ -71,7 +71,6 @@ public class SinhVienService {
                 .retrieve()
                 .bodyToMono(Integer.class);
             Integer resultLTC = responseLTC.block();
-
             sinhVienRepository.xoaSinhVien(masv);
             return 1;
         } catch (DataAccessException dataAccessException) {

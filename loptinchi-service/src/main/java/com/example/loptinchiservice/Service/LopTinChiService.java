@@ -63,6 +63,9 @@ public class LopTinChiService {
     public List<String> danhSachLopKhoa(String makhoa) {
         return lopTinChiRepository.danhSachLopKhoa(makhoa);
     }
+    public List<String> LTCSV(int maltc) {
+        return lopTinChiRepository.LTCSV(maltc);
+    }
 
     public List<String> locMaKhoa() {
         return lopTinChiRepository.locMaKhoa();

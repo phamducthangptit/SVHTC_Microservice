@@ -128,8 +128,8 @@ public class ThongTinLTCController {
             return ResponseEntity.ok().build();
         }
     }
-    @RequestMapping(value = "/xoa-sv", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaSV(@Validated @RequestParam("masv") String masv){
+    @RequestMapping(value = "/xoa-sv", method = RequestMethod.POST)
+    public ResponseEntity<?> xoaSV(@Validated @RequestBody String masv){
         if(sinhVienService.xoaSV(masv) == 0){
             return ResponseEntity.badRequest().build();
         } else {
@@ -152,8 +152,8 @@ public class ThongTinLTCController {
             return ResponseEntity.ok().build();
         }
     }
-    @RequestMapping(value = "/xoa-gv", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaGV(@Validated @RequestParam("magv") String magv){
+    @RequestMapping(value = "/xoa-gv", method = RequestMethod.POST)
+    public ResponseEntity<?> xoaGV(@Validated @RequestBody String magv){
         if(giangVienService.xoaGV(magv) == 0){
             return ResponseEntity.badRequest().build();
         } else {
