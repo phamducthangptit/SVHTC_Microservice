@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 
 import com.example.loptinchiservice.Repository.LopTinChiRepository;
 import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
+
+import jakarta.transaction.Transactional;
 import com.example.loptinchiservice.ResponseDTO.ResponseMucPhi;
 import com.example.loptinchiservice.ResponseDTO.SinhVienHocPhi;
 
@@ -266,6 +268,7 @@ public class LopTinChiService {
         return new ApiResponse<List<LTCDTO>>(200, "Lấy danh sách lớp tín chỉ thành công!", result);
     }
 
+    @Transactional
     @CircuitBreaker(name = "insertHocPhi", fallbackMethod = "fallbackInsertHocPhi")
     public ApiResponse dangKyLTC(int maltc, String masv, int soSVtoiDa) {
         int svdaDK = getSoLuongDaDKTheoMaLTC(maltc);
@@ -306,6 +309,7 @@ public class LopTinChiService {
 
     @Transactional
     public ApiResponse huyDangKyLTC(int maltc, String masv) {
+        lopTinChiRepository.deleteSVDangKi(maltc, masv);
         Map<String, Object> mh = lopTinChiRepository.getMaMHFromLTC(maltc);
         Map<String, Object> sv = lopTinChiRepository.getInfoSVDK(masv);
         ResponseMucPhi data1 = new ResponseMucPhi(masv, (String) mh.get("MAMH"));
@@ -347,4 +351,6 @@ public class LopTinChiService {
     public ApiResponse fallbackInsertHocPhi(int maltc, String masv, int soSVtoiDa, Throwable t) {
         return new ApiResponse<String>(300, "Lưu môn học thất bại!", t.getMessage());
     }
+
+
 }

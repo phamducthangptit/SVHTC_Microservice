@@ -33,9 +33,11 @@ public class LoginController {
     @PostMapping("login")
     public Map<String, String> testLogin(@RequestBody Map<String, String> user) {
         String result = authService.login(user.get("username"), user.get("password"));
+        String role = taiKhoanService.getRoleUser(user.get("username"));
         Map<String, String> result1 = new HashMap<>();
         result1.put("token", result);
         result1.put("user", user.get("username"));
+        result1.put("role", role);
         return result1;
     }
 

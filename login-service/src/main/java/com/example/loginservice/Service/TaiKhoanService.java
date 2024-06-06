@@ -63,4 +63,8 @@ public class TaiKhoanService {
         }
         return new ApiResponse<Object>(203, "Email không chính xác!", null);
     }
+
+    public String getRoleUser(String username) {
+        return taiKhoanRepository.getRoleTaiKhoan(username);
+    }
 }
