@@ -22,4 +22,18 @@ public class MonHocService {
                 monHoc.getSoTinChi());
         return new ApiResponse<>(200, "Thêm mới môn học thành công", null);
     }
+
+    public ApiResponse updateMonHoc(MonHoc monHoc) {
+        monHocRepository.updateMonHoc(monHoc.getMaMH(),
+                monHoc.getTenMH(),
+                monHoc.getSoTietLT(),
+                monHoc.getSoTietTH(),
+                monHoc.getSoTinChi());
+        return new ApiResponse<>(200, "Cập nhật môn học thành công", null);
+    }
+
+    public ApiResponse deleteMonHoc(String maMH) {
+        monHocRepository.deleteMonHoc(maMH);
+        return new ApiResponse<Object>(200, "Xoá môn học thành công", null);
+    }
 }

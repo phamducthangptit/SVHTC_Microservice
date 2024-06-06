@@ -24,4 +24,14 @@ public class MonHocController {
         System.out.println(monHoc.toString());
         return monHocService.insertMonHoc(monHoc);
     }
+
+    @PostMapping("thay-doi-mon-hoc")
+    public ApiResponse thayDoiMonHoc(@RequestBody MonHoc monHoc) {
+        return monHocService.updateMonHoc(monHoc);
+    }
+
+    @PostMapping("xoa-mon-hoc")
+    public ApiResponse xoaMonHoc(@RequestBody String maMH) {
+        return monHocService.deleteMonHoc(maMH);
+    }
 }
