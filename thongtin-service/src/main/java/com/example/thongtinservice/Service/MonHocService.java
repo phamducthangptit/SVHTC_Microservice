@@ -52,6 +52,7 @@ public class MonHocService {
 
         for (int i = 0; i < dsMonHoc.size(); i++) {
             MonHocDTO dto = new MonHocDTO(start + i + 1, dsMonHoc.get(i));
+            dto.getMonHoc().setDiem(null);
             dsMonHocDTO.add(dto);
         }
         return new ApiResponse<List<MonHocDTO>>(200, "Lấy danh sách môn học thành công!", dsMonHocDTO);
@@ -66,6 +67,7 @@ public class MonHocService {
 
         for (int i = 0; i < dsMH.size(); i++) {
             MonHocDTO dto = new MonHocDTO(i + 1, dsMH.get(i));
+            dto.getMonHoc().setDiem(null);
             dsMonHocDTO.add(dto);
         }
         return new ApiResponse<List<MonHocDTO>>(200, "Lấy danh sách môn học thành công!", dsMonHocDTO);
@@ -77,13 +79,6 @@ public class MonHocService {
         if (kiemTraTrung == 1) {
             return new ApiResponse<>(203, "Môn học đã tồn tại", null);
         }
-
-        monHocRepository.insertMonHoc(monHoc.getMaMH(),
-                monHoc.getTenMH(),
-                monHoc.getSoTietLT(),
-                monHoc.getSoTietTH(),
-                monHoc.getSoTinChi());
-
         Mono<ApiResponse> response = webClient.build().post()
                 .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-mon-hoc")
                 .header(HttpHeaders.AUTHORIZATION, token)
@@ -93,10 +88,24 @@ public class MonHocService {
         ApiResponse result = response.block();
         System.out.println("check:" + result.toString());
 
+        monHocRepository.insertMonHoc(monHoc.getMaMH(),
+                monHoc.getTenMH(),
+                monHoc.getSoTietLT(),
+                monHoc.getSoTietTH(),
+                monHoc.getSoTinChi());
+
         return new ApiResponse<>(200, "Thêm mới môn học thành công", null);
     }
 
+    @CircuitBreaker(name = "updateMonHoc", fallbackMethod = "fallbackUpdateMonHoc")
     public ApiResponse updateMonHoc(MonHoc monHoc) {
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/thay-doi-mon-hoc")
+                .body(Mono.just(monHoc), MonHoc.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        System.out.println("check:" + result.getStatus());
         monHocRepository.updateMonHoc(monHoc.getMaMH(),
                 monHoc.getTenMH(),
                 monHoc.getSoTietLT(),
@@ -105,11 +114,19 @@ public class MonHocService {
         return new ApiResponse<Object>(200, "Cập nhật môn học thành công", null);
     }
 
+    @CircuitBreaker(name = "deleteMonHoc", fallbackMethod = "fallbackDeleteMonHoc")
     public ApiResponse deleteMonHoc(String maMH) {
         Integer kiemTraXoaMH = monHocRepository.kiemTraXoaMonHoc(maMH);
         if (kiemTraXoaMH == 1) {
             return new ApiResponse<Object>(203, "Môn học đang được giảng dạy không thể xoá!", null);
         }
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/xoa-mon-hoc")
+                .body(Mono.just(maMH), String.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        System.out.println("check:" + result.getStatus());
         monHocRepository.deleteMonHoc(maMH);
         return new ApiResponse<Object>(200, "Xoá môn học thành công", null);
     }
@@ -117,6 +134,16 @@ public class MonHocService {
     public ApiResponse fallbackInsertMonHoc(MonHoc monHoc, String token, Throwable t) {
         logger.error("Fallback triggered for monHoc={} due to: {}", monHoc.toString(), t.getMessage());
         return new ApiResponse<>(300, "Lưu môn học thất bại!", null);
+    }
+
+    public ApiResponse fallbackUpdateMonHoc(MonHoc monHoc, Throwable t) {
+        logger.error("Fallback triggered for monHoc={} due to: {}", monHoc.toString(), t.getMessage());
+        return new ApiResponse<>(300, "Cập nhật môn học thất bại!", null);
+    }
+
+    public ApiResponse fallbackDeleteMonHoc(String maMH, Throwable t) {
+        logger.error("Fallback triggered for monHoc={} due to: {}", maMH, t.getMessage());
+        return new ApiResponse<>(300, "Xoá môn học thất bại!", null);
     }
 
 }

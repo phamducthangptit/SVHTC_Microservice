@@ -15,4 +15,13 @@ public interface MonHocRepository extends JpaRepository<MonHoc, String> {
             @Param("sotth") int sotth,
             @Param("sotc") int sotc);
 
+    @Procedure(procedureName = "SP_UPDATE_MON_HOC")
+    void updateMonHoc(@Param("mamh") String mamh,
+            @Param("tenmh") String tenmh,
+            @Param("sotlt") int sotlt,
+            @Param("sotth") int sotth,
+            @Param("sotc") int sotc);
+
+    @Procedure(procedureName = "SP_DELETE_MON_HOC")
+    void deleteMonHoc(@Param("mamh") String mamh);
 }

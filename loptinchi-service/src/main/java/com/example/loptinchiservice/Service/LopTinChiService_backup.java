@@ -7,16 +7,25 @@ import com.example.loptinchiservice.DTO.LopTinChiDTO;
 import com.example.loptinchiservice.DTO.MonHocDTO;
 import com.example.loptinchiservice.Model.GiangVien;
 import com.example.loptinchiservice.Model.LopTinChi;
+import com.example.loptinchiservice.Model.MonHoc;
 import com.example.loptinchiservice.Repository.LopTinChiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpHeaders;
+
 import com.example.loptinchiservice.Repository.LopTinChiRepository;
 import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
+import com.example.loptinchiservice.ResponseDTO.ResponseMucPhi;
+import com.example.loptinchiservice.ResponseDTO.SinhVienHocPhi;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 import jakarta.transaction.Transactional;
+import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -29,6 +38,9 @@ import java.util.Map;
 public class LopTinChiService {
     @Autowired
     LopTinChiRepository lopTinChiRepository;
+
+    @Autowired
+    private WebClient.Builder webClient;
 
     public GiangVienDTO mapGVDTO(Map<String, Object> giangvien) {
         GiangVienDTO giangVienDTO = new GiangVienDTO();
@@ -251,24 +263,85 @@ public class LopTinChiService {
         return new ApiResponse<List<LTCDTO>>(200, "Lấy danh sách lớp tín chỉ thành công!", result);
     }
 
-    @Transactional
+    @CircuitBreaker(name = "insertHocPhi", fallbackMethod = "fallbackInsertHocPhi")
     public ApiResponse dangKyLTC(int maltc, String masv, int soSVtoiDa) {
         int svdaDK = getSoLuongDaDKTheoMaLTC(maltc);
         if (svdaDK == soSVtoiDa) {
             return new ApiResponse<>(202, "Lớp không còn vị trí trống để đăng kí!", null);
         }
+        Map<String, Object> mh = lopTinChiRepository.getMaMHFromLTC(maltc);
+        Map<String, Object> sv = lopTinChiRepository.getInfoSVDK(masv);
+        ResponseMucPhi data1 = new ResponseMucPhi(masv, (String) mh.get("MAMH"));
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://thong-tin-service/api/thong-tin/muc-phi/lay-muc-phi")
+                .body(Mono.just(data1), ResponseMucPhi.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        int mucPhi = (Integer) result.getData();
+        System.out.println("Check data muc phi: " + mucPhi);
+        SinhVienHocPhi data2 = new SinhVienHocPhi();
+        data2.setMaSV(masv);
+        data2.setHoSV((String) sv.get("HO"));
+        data2.setTenSV((String) sv.get("TEN"));
+        Map<String, Object> thongTin = layHocKiHienTai();
+        data2.setNienKhoa((String) thongTin.get("nienKhoa"));
+        data2.setHocKi((Integer) thongTin.get("hocKy"));
+        data2.setSoTien(mucPhi * ((Integer) mh.get("SOTC")));
+        System.out.println((Integer) mh.get("SOTC"));
+        System.out.println(data2.getSoTien());
+        Mono<ApiResponse> response1 = webClient.build().post()
+                .uri("http://thanh-toan-service/api/thanh-toan/hoc-phi/them-hoc-phi")
+                .body(Mono.just(data2), SinhVienHocPhi.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result1 = response1.block();
+        System.out.println("Check lưu hoc phí" + result1.getStatus());
         insertSVDangKi(maltc, masv);
         return new ApiResponse<>(200, "Đăng kí thành công!", null);
     }
 
     @Transactional
     public ApiResponse huyDangKyLTC(int maltc, String masv) {
+        Map<String, Object> mh = lopTinChiRepository.getMaMHFromLTC(maltc);
+        Map<String, Object> sv = lopTinChiRepository.getInfoSVDK(masv);
+        ResponseMucPhi data1 = new ResponseMucPhi(masv, (String) mh.get("MAMH"));
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://thong-tin-service/api/thong-tin/muc-phi/lay-muc-phi")
+                .body(Mono.just(data1), ResponseMucPhi.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        int mucPhi = (Integer) result.getData();
+        System.out.println("Check data muc phi: " + mucPhi);
+        SinhVienHocPhi data2 = new SinhVienHocPhi();
+        data2.setMaSV(masv);
+        data2.setHoSV((String) sv.get("HO"));
+        data2.setTenSV((String) sv.get("TEN"));
+        Map<String, Object> thongTin = layHocKiHienTai();
+        data2.setNienKhoa((String) thongTin.get("nienKhoa"));
+        data2.setHocKi((Integer) thongTin.get("hocKy"));
+        data2.setSoTien(-(mucPhi * ((Integer) mh.get("SOTC"))));
+        System.out.println((Integer) mh.get("SOTC"));
+        System.out.println(data2.getSoTien());
+        Mono<ApiResponse> response1 = webClient.build().post()
+                .uri("http://thanh-toan-service/api/thanh-toan/hoc-phi/them-hoc-phi")
+                .body(Mono.just(data2), SinhVienHocPhi.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result1 = response1.block();
+        System.out.println("Check lưu hoc phí" + result1.getStatus());
         lopTinChiRepository.deleteSVDangKi(maltc, masv);
+
         return new ApiResponse<>(200, "Huỷ đăng kí thành công!", null);
     }
 
     public ApiResponse layThongTinLop123() {
         List<Map<String, Object>> data = lopTinChiRepository.getThongTinLop123();
         return new ApiResponse<List<Map<String, Object>>>(200, "Lấy thông tin lớp thành công", data);
+    }
+
+    public ApiResponse fallbackInsertHocPhi(int maltc, String masv, int soSVtoiDa, Throwable t) {
+        return new ApiResponse<String>(300, "Lưu môn học thất bại!", t.getMessage());
     }
 }
