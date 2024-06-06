@@ -25,6 +25,7 @@ public class ThongTinLTCController {
     SinhVienService sinhVienService;
     @Autowired
     GiangVienService giangVienService;
+
     @GetMapping("/loc-ma-khoa")
     public ResponseEntity<List<String>> locMaKhoa() {
         try {
@@ -35,17 +36,21 @@ public class ThongTinLTCController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/kt-ltc")
     public int ktltc(@RequestParam("maltc") int maltc) {
         try {
             List<String> svlist = lopTinChiService.LTCSV(maltc);
-            if (svlist.size()>0) return 1;
-            else return 0;
+            if (svlist.size() > 0)
+                return 1;
+            else
+                return 0;
         } catch (Exception e) {
 
             return 0;
         }
     }
+
     @GetMapping("/loc-nien-khoa")
     public ResponseEntity<List<String>> locNienKhoa() {
         try {
@@ -56,6 +61,7 @@ public class ThongTinLTCController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/loc-mon-hoc")
     public ResponseEntity<List<MonHocDTO>> locMonHoc() {
         try {
@@ -66,19 +72,21 @@ public class ThongTinLTCController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/loc-gv-khoa")
     public ResponseEntity<List<GiangVienDTO>> locGVKhoa(@RequestParam("ma-khoa") String makhoa) {
-        return  ResponseEntity.ok(lopTinChiService.locGVKhoa(makhoa));
+        return ResponseEntity.ok(lopTinChiService.locGVKhoa(makhoa));
     }
 
     @GetMapping("/loc-ltc")
     public ResponseEntity<List<LopTinChiDTO>> locGVKhoa(@RequestParam("ma-khoa") String makhoa,
-                                                        @RequestParam("nien-khoa") String nienkhoa,
-                                                        @RequestParam("hoc-ki") int hocki
+            @RequestParam("nien-khoa") String nienkhoa,
+            @RequestParam("hoc-ki") int hocki
 
     ) {
-        return  ResponseEntity.ok(lopTinChiService.locLTC(makhoa, nienkhoa, hocki));
+        return ResponseEntity.ok(lopTinChiService.locLTC(makhoa, nienkhoa, hocki));
     }
+
     @GetMapping("/loc-lop-khoa")
     public ResponseEntity<List<String>> locLopKhoa(@RequestParam("ma-khoa") String makhoa) {
         try {
@@ -91,74 +99,83 @@ public class ThongTinLTCController {
     }
 
     @RequestMapping(value = "/them-ltc", method = RequestMethod.POST)
-    public ResponseEntity<LopTinChiDTO> themLTC(@Validated @RequestBody LopTinChiDTO ltc){
-        int x = lopTinChiService.themLTC(ltc.getMamh(), ltc.getMalop(), ltc.getMagv(), ltc.getNienkhoa(), ltc.getNhom(), ltc.getSosvtt(), ltc.getSosvtd(), ltc.getHocki(), ltc.getMakhoa());
-        if(x == 1)
+    public ResponseEntity<LopTinChiDTO> themLTC(@Validated @RequestBody LopTinChiDTO ltc) {
+        int x = lopTinChiService.themLTC(ltc.getMamh(), ltc.getMalop(), ltc.getMagv(), ltc.getNienkhoa(), ltc.getNhom(),
+                ltc.getSosvtt(), ltc.getSosvtd(), ltc.getHocki(), ltc.getMakhoa());
+        if (x == 1)
             return new ResponseEntity<>(ltc, HttpStatus.OK);
         return new ResponseEntity<>(ltc, HttpStatus.BAD_REQUEST);
     }
+
     @RequestMapping(value = "/update-ltc", method = RequestMethod.POST)
-    public ResponseEntity<LopTinChiDTO> updateLTC(@Validated @RequestBody LopTinChiDTO ltc){
-        int x = lopTinChiService.updateLTC(ltc.getMaltc(), ltc.getMagv(), ltc.getNhom(), ltc.getSosvtt(), ltc.getSosvtd(), ltc.getMalop());
-        if(x == 1)
+    public ResponseEntity<LopTinChiDTO> updateLTC(@Validated @RequestBody LopTinChiDTO ltc) {
+        int x = lopTinChiService.updateLTC(ltc.getMaltc(), ltc.getMagv(), ltc.getNhom(), ltc.getSosvtt(),
+                ltc.getSosvtd(), ltc.getMalop());
+        if (x == 1)
             return new ResponseEntity<>(ltc, HttpStatus.OK);
         return new ResponseEntity<>(ltc, HttpStatus.BAD_REQUEST);
     }
+
     @RequestMapping(value = "/xoa-ltc", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaLTC(@RequestParam("maltc") int maltc){
+    public ResponseEntity<?> xoaLTC(@RequestParam("maltc") int maltc) {
         int x = lopTinChiService.xoaLTC(maltc);
-        if(x == 1)
+        if (x == 1)
             return new ResponseEntity<>(HttpStatus.OK);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/them-sv", method = RequestMethod.POST)
-    public ResponseEntity<?> themSV(@Validated @RequestBody SinhVienDTO sv){
-        if(sinhVienService.themSV(sv) == 0){
+    public ResponseEntity<?> themSV(@Validated @RequestBody SinhVienDTO sv) {
+        if (sinhVienService.themSV(sv) == 0) {
             return ResponseEntity.badRequest().build();
         } else {
             return ResponseEntity.ok().build();
         }
     }
-    @RequestMapping(value = "/update-sv", method = RequestMethod.POST)
-    public ResponseEntity<?> updateSV(@Validated @RequestBody SinhVienDTO sv){
-        if(sinhVienService.updateSV(sv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/xoa-sv", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaSV(@Validated @RequestParam("masv") String masv){
-        if(sinhVienService.xoaSV(masv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/them-gv", method = RequestMethod.POST)
-    public ResponseEntity<?> themGV(@Validated @RequestBody GiangVienDTO gv){
-        if(giangVienService.themGV(gv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/update-gv", method = RequestMethod.POST)
-    public ResponseEntity<?> updateGV(@Validated @RequestBody GiangVienDTO gv){
-        if(giangVienService.updateGV(gv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/xoa-gv", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaGV(@Validated @RequestParam("magv") String magv){
-        if(giangVienService.xoaGV(magv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-}
 
+    @RequestMapping(value = "/update-sv", method = RequestMethod.POST)
+    public ResponseEntity<?> updateSV(@Validated @RequestBody SinhVienDTO sv) {
+        if (sinhVienService.updateSV(sv) == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(value = "/xoa-sv", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaSV(@Validated @RequestParam("masv") String masv) {
+        if (sinhVienService.xoaSV(masv) == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(value = "/them-gv", method = RequestMethod.POST)
+    public ResponseEntity<?> themGV(@Validated @RequestBody GiangVienDTO gv) {
+        if (giangVienService.themGV(gv) == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(value = "/update-gv", method = RequestMethod.POST)
+    public ResponseEntity<?> updateGV(@Validated @RequestBody GiangVienDTO gv) {
+        if (giangVienService.updateGV(gv) == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+    @RequestMapping(value = "/xoa-gv", method = RequestMethod.GET)
+    public ResponseEntity<?> xoaGV(@Validated @RequestParam("magv") String magv) {
+        if (giangVienService.xoaGV(magv) == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            return ResponseEntity.ok().build();
+        }
+    }
+
+}
