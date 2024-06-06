@@ -3,6 +3,7 @@ package com.example.thongtinservice.Repository;
 import com.example.thongtinservice.DTO.SinhVienDTO;
 import com.example.thongtinservice.Model.Lop;
 import com.example.thongtinservice.Model.SinhVien;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -11,12 +12,8 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
-
+@Transactional
 public interface SinhVienRepository extends JpaRepository<SinhVien, String> {
-
-    SinhVien findBymasv(String maSV);
-    List<SinhVien> findBymalop(Lop maLop);
-    List<SinhVien> findAll();
 
     @Query(value = "{call THONGTIN_SINHVIEN(:MASV)}", nativeQuery = true)
     public Map<String, Object> thongtinSV(@Param("MASV") String masv);

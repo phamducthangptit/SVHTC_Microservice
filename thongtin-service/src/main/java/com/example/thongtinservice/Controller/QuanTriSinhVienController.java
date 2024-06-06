@@ -175,7 +175,4 @@ public class QuanTriSinhVienController {
                 .body(new InputStreamResource(in));
     }
 
-
-
-
 }

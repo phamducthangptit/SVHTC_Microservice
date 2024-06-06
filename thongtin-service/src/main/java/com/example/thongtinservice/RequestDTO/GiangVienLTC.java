@@ -1,14 +1,15 @@
-package com.example.loptinchiservice.DTO;
+package com.example.thongtinservice.RequestDTO;
 
-public class GiangVienDTO {
+public class GiangVienLTC {
     private String magv;
     private String ho;
     private String ten;
     private String makhoa;
-    public GiangVienDTO() {
+    public GiangVienLTC (){
+
     }
 
-    public GiangVienDTO(String magv, String ho, String ten, String makhoa) {
+    public GiangVienLTC(String magv, String ho, String ten, String makhoa) {
         this.magv = magv;
         this.ho = ho;
         this.ten = ten;
