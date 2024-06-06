@@ -24,4 +24,7 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, String> {
 
     @Query(value = "{call SP_GET_EMAIL_TKGV(:username)}", nativeQuery = true)
     String getEmailGV(@Param("username") String username);
+
+    @Query(value = "{call SP_GET_ROLE_USERNAME(:username)}", nativeQuery = true)
+    String getRoleTaiKhoan(@Param("username") String username);
 }
