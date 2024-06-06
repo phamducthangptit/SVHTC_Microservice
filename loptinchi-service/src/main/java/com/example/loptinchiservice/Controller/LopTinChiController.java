@@ -1,4 +1,5 @@
 package com.example.loptinchiservice.Controller;
+
 import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
 import com.example.loptinchiservice.ResponseDTO.SinhVienLtcResponse;
 import com.example.loptinchiservice.Service.LopTinChiService;
@@ -23,19 +24,20 @@ public class LopTinChiController {
 
     @Autowired
     private SinhVienService sinhVienService;
+
     @GetMapping("/danh-sach-ltc")
-    public ResponseEntity<?> danhSachLtcTheoMaGV(@RequestParam("ma-gv") String maGV){
+    public ResponseEntity<?> danhSachLtcTheoMaGV(@RequestParam("ma-gv") String maGV) {
         List<LopTinChiResponse> result = lopTinChiService.danhSachLtcTheoMaGv(maGV);
-        if(result == null){
+        if (result == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/danh-sach-sinh-vien")
-    public ResponseEntity<?> danhSachSinhVienLTC(@RequestParam("ma-ltc") int maLTC){
+    public ResponseEntity<?> danhSachSinhVienLTC(@RequestParam("ma-ltc") int maLTC) {
         List<SinhVienLtcResponse> result = sinhVienService.danhSachSinhVienLtc(maLTC);
-        if(result == null){
+        if (result == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(result, HttpStatus.OK);
