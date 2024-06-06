@@ -1,5 +1,6 @@
 package com.example.thanhtoanhocphiservice.controller;
 
+import com.example.thanhtoanhocphiservice.dto.HocPhiList;
 import com.example.thanhtoanhocphiservice.dto.HocPhiSVDTO;
 import com.example.thanhtoanhocphiservice.dto.SinhVienDTO;
 import com.example.thanhtoanhocphiservice.service.SinhVienService;
@@ -15,32 +16,14 @@ import java.util.List;
 public class ThongTinController {
     @Autowired
     SinhVienService sinhVienService;
-    @RequestMapping(value = "/them-sv", method = RequestMethod.POST)
-    public ResponseEntity<?> themSV(@Validated @RequestBody SinhVienDTO sv){
-        if(sinhVienService.themSV(sv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/update-sv", method = RequestMethod.POST)
-    public ResponseEntity<?> updateSV(@Validated @RequestBody SinhVienDTO sv){
-        if(sinhVienService.updateSV(sv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @RequestMapping(value = "/xoa-sv", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaSV(@Validated @RequestParam("masv") String masv){
-        if(sinhVienService.xoaSV(masv) == 0){
-            return ResponseEntity.badRequest().build();
-        } else {
-            return ResponseEntity.ok().build();
-        }
-    }
-    @GetMapping("/xem-hocphi-sv")
-    public ResponseEntity<List<HocPhiSVDTO>> locGVKhoa(@RequestParam("masv") String masv) {
+
+    @GetMapping("/xem-hoc-phi-sv")
+    public ResponseEntity<List<HocPhiSVDTO>> xemHP(@RequestParam("masv") String masv) {
+        System.out.println(masv);
         return  ResponseEntity.ok(sinhVienService.xemHP(masv));
+    }
+    @GetMapping("/xem-dssv-hoc-phi")
+    public ResponseEntity<List<HocPhiList>> DSSVHP() {
+        return  ResponseEntity.ok(sinhVienService.DSSVHP());
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 @Transactional
 public interface GiangVienRepo extends JpaRepository<GiangVien, String> {
+    @Query(value = "{call SP_LIST_GV_LTC(:magv)}", nativeQuery = true)
+    List<String> danhSachLtcGV(@Param("magv") String magv);
     @Procedure(procedureName = "SP_THEM_GV")
     void themGiangVienMoi(
             @Param("magv") String magv,

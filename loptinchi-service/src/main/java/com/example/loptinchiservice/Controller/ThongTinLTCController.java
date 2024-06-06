@@ -35,6 +35,17 @@ public class ThongTinLTCController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/kt-ltc")
+    public int ktltc(@RequestParam("maltc") int maltc) {
+        try {
+            List<String> svlist = lopTinChiService.LTCSV(maltc);
+            if (svlist.size()>0) return 1;
+            else return 0;
+        } catch (Exception e) {
+
+            return 0;
+        }
+    }
     @GetMapping("/loc-nien-khoa")
     public ResponseEntity<List<String>> locNienKhoa() {
         try {
@@ -78,6 +89,7 @@ public class ThongTinLTCController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @RequestMapping(value = "/them-ltc", method = RequestMethod.POST)
     public ResponseEntity<LopTinChiDTO> themLTC(@Validated @RequestBody LopTinChiDTO ltc){
         int x = lopTinChiService.themLTC(ltc.getMamh(), ltc.getMalop(), ltc.getMagv(), ltc.getNienkhoa(), ltc.getNhom(), ltc.getSosvtt(), ltc.getSosvtd(), ltc.getHocki(), ltc.getMakhoa());

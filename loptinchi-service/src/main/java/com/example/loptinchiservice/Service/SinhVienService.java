@@ -32,7 +32,9 @@ public class SinhVienService {
         return null;
     }
 
-
+    public List<String> danhSachLtcSV(String masv) {
+        return repository.danhSachLtcSV(masv);
+    }
     public int themSV(SinhVienDTO sv) {
         try {
             repository.themSV(

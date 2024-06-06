@@ -13,7 +13,8 @@ import java.util.List;
 public interface SinhVienRepository extends JpaRepository<SinhVien, String> {
     @Query(value = "{call SP_GET_DANH_SACH_SV_LTC(:maltc)}", nativeQuery = true)
     List<Object[]> danhSachLtcTheoMaGV(@Param("maltc") int maLTC);
-
+    @Query(value = "{call SP_LIST_SV_LTC(:masv)}", nativeQuery = true)
+    List<String> danhSachLtcSV(@Param("masv") String masv);
 
     @Procedure(procedureName = "SP_THEM_SV")
     void themSV(

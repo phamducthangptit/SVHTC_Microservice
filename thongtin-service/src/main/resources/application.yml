@@ -1,4 +1,4 @@
-management:
+amanagement:
   health:
     circuitbreakers:
       enabled: true
