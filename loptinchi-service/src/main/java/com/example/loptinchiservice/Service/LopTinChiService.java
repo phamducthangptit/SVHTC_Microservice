@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 
 import com.example.loptinchiservice.Repository.LopTinChiRepository;
 import com.example.loptinchiservice.ResponseDTO.LopTinChiResponse;
+
+import jakarta.transaction.Transactional;
 import com.example.loptinchiservice.ResponseDTO.ResponseMucPhi;
 import com.example.loptinchiservice.ResponseDTO.SinhVienHocPhi;
 
@@ -41,7 +43,6 @@ public class LopTinChiService {
 
     @Autowired
     private WebClient.Builder webClient;
-
     public GiangVienDTO mapGVDTO(Map<String, Object> giangvien) {
         GiangVienDTO giangVienDTO = new GiangVienDTO();
         giangVienDTO.setMagv((String) giangvien.get("MAGV"));
@@ -119,7 +120,7 @@ public class LopTinChiService {
     }
 
     public int themLTC(String mamh, String malop, String magv, String nienKhoa, int nhom, int sosvtt, int sosvtd,
-            int hocKi, String maKhoa) {
+                       int hocKi, String maKhoa) {
 
         try {
             lopTinChiRepository.addLTC(mamh, malop, magv, nienKhoa, nhom, sosvtt, sosvtd, hocKi, maKhoa);
@@ -263,6 +264,7 @@ public class LopTinChiService {
         return new ApiResponse<List<LTCDTO>>(200, "Lấy danh sách lớp tín chỉ thành công!", result);
     }
 
+    @Transactional
     @CircuitBreaker(name = "insertHocPhi", fallbackMethod = "fallbackInsertHocPhi")
     public ApiResponse dangKyLTC(int maltc, String masv, int soSVtoiDa) {
         int svdaDK = getSoLuongDaDKTheoMaLTC(maltc);
@@ -303,6 +305,7 @@ public class LopTinChiService {
 
     @Transactional
     public ApiResponse huyDangKyLTC(int maltc, String masv) {
+        lopTinChiRepository.deleteSVDangKi(maltc, masv);
         Map<String, Object> mh = lopTinChiRepository.getMaMHFromLTC(maltc);
         Map<String, Object> sv = lopTinChiRepository.getInfoSVDK(masv);
         ResponseMucPhi data1 = new ResponseMucPhi(masv, (String) mh.get("MAMH"));
