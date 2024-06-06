@@ -25,6 +25,8 @@ public interface LopTinChiRepository extends JpaRepository<LopTinChi, Integer> {
 
         @Query(value = "EXEC SP_LOC_GV_KHOA :makhoa", nativeQuery = true)
         List<Map<String, Object>> locGiangVien(@Param("makhoa") String makhoa);
+        @Query(value = "EXEC SP_LIST_LTC_SV:maltc", nativeQuery = true)
+        List<String> LTCSV(@Param("maltc") int maltc);
 
         @Query(value = "{call SP_GET_LIST_LTC_DK(:namhoc, :hocki, :malop, :masv)}", nativeQuery = true)
         List<Map<String, Object>> getDanhSachLTCDeDangKi(
@@ -89,4 +91,10 @@ public interface LopTinChiRepository extends JpaRepository<LopTinChi, Integer> {
         @Procedure(procedureName = "SP_DELETE_DANGKI")
         void deleteSVDangKi(@Param("maltc") int maltc,
                         @Param("masv") String masv);
+
+        @Query(value = "{call SP_GET_MAMH_FROM_LTC(:maltc)}", nativeQuery = true)
+        Map<String, Object> getMaMHFromLTC(@Param("maltc") int maltc);
+
+        @Query(value = "{call SP_GET_INFO_SV_DK(:masv)}", nativeQuery = true)
+        Map<String, Object> getInfoSVDK(@Param("masv") String maSV);
 }
