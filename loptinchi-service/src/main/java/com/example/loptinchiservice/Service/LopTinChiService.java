@@ -43,6 +43,7 @@ public class LopTinChiService {
 
     @Autowired
     private WebClient.Builder webClient;
+
     public GiangVienDTO mapGVDTO(Map<String, Object> giangvien) {
         GiangVienDTO giangVienDTO = new GiangVienDTO();
         giangVienDTO.setMagv((String) giangvien.get("MAGV"));
@@ -120,7 +121,7 @@ public class LopTinChiService {
     }
 
     public int themLTC(String mamh, String malop, String magv, String nienKhoa, int nhom, int sosvtt, int sosvtd,
-                       int hocKi, String maKhoa) {
+            int hocKi, String maKhoa) {
 
         try {
             lopTinChiRepository.addLTC(mamh, malop, magv, nienKhoa, nhom, sosvtt, sosvtd, hocKi, maKhoa);
@@ -346,5 +347,9 @@ public class LopTinChiService {
 
     public ApiResponse fallbackInsertHocPhi(int maltc, String masv, int soSVtoiDa, Throwable t) {
         return new ApiResponse<String>(300, "Lưu môn học thất bại!", t.getMessage());
+    }
+
+    public List<String> LTCSV(int maltc) {
+        return lopTinChiRepository.LTCSV(maltc);
     }
 }
