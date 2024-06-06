@@ -20,9 +20,7 @@ import java.util.Optional;
 public class SinhVienService {
     @Autowired
     SinhVienRepository sinhVienRepository;
-    public SinhVien sinhVienTheoMa(String maSV){
-        return sinhVienRepository.findBymasv(maSV);
-    }
+
 
 
     public int themSinhVienMoi(SinhVienDTO sinhVien, String password) {

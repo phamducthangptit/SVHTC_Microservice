@@ -117,7 +117,6 @@ public class NhapDiemService {
                 diemRequest.getNienKhoa(),
                 diemRequest.getHocKi(),
                 diemRequest.getMaMH(),
-                diemRequest.getMaGv(),
                 diemRequest.getDiemCC(),
                 diemRequest.getDiemGK(),
                 diemRequest.getDiemCK());
