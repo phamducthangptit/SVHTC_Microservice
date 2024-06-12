@@ -23,4 +23,7 @@ public class LopTinChiResponse {
 
     @JsonProperty("TENMH")
     private String tenMH;
+
+    @JsonProperty("NHOM")
+    private int nhom;
 }

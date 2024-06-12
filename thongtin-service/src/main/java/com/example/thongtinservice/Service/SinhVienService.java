@@ -33,8 +33,6 @@ public class SinhVienService {
         String newPass = encoder.encode(password);
         SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
         try {
-
-
             sinhVienRepository.themSinhVienMoi(
                     sinhVien.getMasv(),
                     sinhVien.getHo(),
@@ -89,6 +87,7 @@ public class SinhVienService {
         SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
 
         try {
+
             sinhVienRepository.updateSinhVien(
                     sinhVien.getMasv(),
                     sinhVien.getHo(),
@@ -196,7 +195,9 @@ public class SinhVienService {
         diemTongKetResponse.setDiemCK((double) result[7]);
 
         // tinh diem tk
-        diemTongKetResponse.setDiemTK10(diemTongKetResponse.getDiemCC() * 0.1 + diemTongKetResponse.getDiemGK() * 0.3 + diemTongKetResponse.getDiemCK() * 0.6);
+        double diemTK = diemTongKetResponse.getDiemCC() * 0.1 + diemTongKetResponse.getDiemGK() * 0.3 + diemTongKetResponse.getDiemCK() * 0.6;
+        double diemTKRounded = Math.round(diemTK * 100.0) / 100.0;
+        diemTongKetResponse.setDiemTK10(diemTKRounded);
         diemTongKetResponse.setDiemTK4VaDiemTKC(diemTongKetResponse.getDiemTK10());
         return diemTongKetResponse;
     }
