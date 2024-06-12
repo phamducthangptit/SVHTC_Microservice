@@ -116,13 +116,13 @@ public class ThongTinLTCController {
         return new ResponseEntity<>(ltc, HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/xoa-ltc", method = RequestMethod.GET)
-    public ResponseEntity<?> xoaLTC(@RequestParam("maltc") int maltc) {
-        int x = lopTinChiService.xoaLTC(maltc);
-        if (x == 1)
-            return new ResponseEntity<>(HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
+        @RequestMapping(value = "/xoa-ltc", method = RequestMethod.GET)
+        public ResponseEntity<?> xoaLTC(@RequestParam("maltc") int maltc) {
+            int x = lopTinChiService.xoaLTC(maltc);
+            if (x == 1)
+                return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
     @RequestMapping(value = "/them-sv", method = RequestMethod.POST)
     public ResponseEntity<?> themSV(@Validated @RequestBody SinhVienDTO sv) {

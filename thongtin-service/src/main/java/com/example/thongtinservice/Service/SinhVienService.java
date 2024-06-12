@@ -2,18 +2,21 @@ package com.example.thongtinservice.Service;
 import com.example.thongtinservice.DTO.SinhVienDTO;
 import com.example.thongtinservice.Model.SinhVien;
 import com.example.thongtinservice.Repository.SinhVienRepository;
+import com.example.thongtinservice.RequestDTO.SinhVienLTC;
 import com.example.thongtinservice.ResponseDTO.DiemTongKetResponse;
 import com.example.thongtinservice.ResponseDTO.NienKhoaHocKi;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Service
@@ -21,12 +24,17 @@ public class SinhVienService {
     @Autowired
     SinhVienRepository sinhVienRepository;
 
+    @Autowired
+    private WebClient.Builder webClient;
 
-
+    @CircuitBreaker(name = "insertSV", fallbackMethod = "fallbackInsertSV")
     public int themSinhVienMoi(SinhVienDTO sinhVien, String password) {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         String newPass = encoder.encode(password);
+        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
         try {
+
+
             sinhVienRepository.themSinhVienMoi(
                     sinhVien.getMasv(),
                     sinhVien.getHo(),
@@ -39,18 +47,33 @@ public class SinhVienService {
                     false,
                     sinhVien.getHinhanh(),
                     sinhVien.getMasv().trim()+"@student.ptithcm.edu.vn",
-                    newPass
-            );
+                    newPass);
+            Mono<Integer> responseLTC = webClient.build().post()
+                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-sv")
+                    .body(Mono.just(svltc), SinhVienLTC.class)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+            Integer resultLTC = responseLTC.block();
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
         return 1;
     }
-
+    public int fallbackInsertSV(SinhVienDTO sinhVien,String password,  Throwable t) {
+        return 0;
+    }
+    @CircuitBreaker(name = "deleteSV", fallbackMethod = "fallbackDeleteSV")
     public int xoaSinhVien(String masv){
         try {
+
             sinhVienRepository.xoaSinhVien(masv);
+            Mono<Integer> responseLTC = webClient.build().post()
+                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/xoa-sv")
+                    .body(Mono.just(masv), String.class)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+            Integer resultLTC = responseLTC.block();
             return 1;
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
@@ -58,9 +81,13 @@ public class SinhVienService {
         }
 
     }
-
+    public int fallbackDeleteSV(String masv,  Throwable t) {
+        return 0;
+    }
+    @CircuitBreaker(name = "updateSV", fallbackMethod = "fallbackUpdateSV")
     public int updateSinhVien(SinhVienDTO sinhVien) {
-        System.out.println(sinhVien.toString());
+        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
+
         try {
             sinhVienRepository.updateSinhVien(
                     sinhVien.getMasv(),
@@ -75,11 +102,20 @@ public class SinhVienService {
                     sinhVien.getHinhanh(),
                     sinhVien.getEmail()
             );
+            Mono<Integer> responseLTC = webClient.build().post()
+                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/update-sv")
+                    .body(Mono.just(svltc), SinhVienLTC.class)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+            Integer resultLTC = responseLTC.block();
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
         return 1;
+    }
+    public int fallbackUpdateSV(SinhVienDTO sinhVien,  Throwable t) {
+        return 0;
     }
     public List<SinhVien> danhSachSVMaLop(String malop){
 

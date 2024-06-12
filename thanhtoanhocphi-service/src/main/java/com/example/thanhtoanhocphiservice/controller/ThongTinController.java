@@ -5,6 +5,7 @@ import com.example.thanhtoanhocphiservice.dto.HocPhiSVDTO;
 import com.example.thanhtoanhocphiservice.dto.SinhVienDTO;
 import com.example.thanhtoanhocphiservice.service.SinhVienService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,17 @@ public class ThongTinController {
         return  ResponseEntity.ok(sinhVienService.xemHP(masv));
     }
     @GetMapping("/xem-dssv-hoc-phi")
-    public ResponseEntity<List<HocPhiList>> DSSVHP() {
-        return  ResponseEntity.ok(sinhVienService.DSSVHP());
+    public ResponseEntity<List<HocPhiList>> DSSVHP(@RequestParam("nienkhoa") String nienkhoa,@RequestParam("hocki") int hocki) {
+        return  ResponseEntity.ok(sinhVienService.DSSVHP( nienkhoa, hocki));
+    }
+    @GetMapping("/loc-nien-khoa")
+    public ResponseEntity<List<String>> locNienKhoa() {
+        try {
+            List<String> nienKhoaList = sinhVienService.locNienKhoa();
+            return new ResponseEntity<>(nienKhoaList, HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
