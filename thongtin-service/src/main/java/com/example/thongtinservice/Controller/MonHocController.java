@@ -40,8 +40,6 @@ public class MonHocController {
     @PostMapping("them-mon-hoc")
     public ApiResponse themMonHoc(@RequestBody MonHoc monHoc, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         System.out.println("Token: " + token);
-        // System.out.print("check data them mon hoc: ");
-        // System.out.println(monHoc.toString());
         return monHocService.insertMonHoc(monHoc, token);
     }
 

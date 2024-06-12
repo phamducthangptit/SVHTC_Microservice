@@ -309,6 +309,7 @@ public class LopTinChiService {
     }
 
     @Transactional
+    @CircuitBreaker(name = "deleteHocPhi", fallbackMethod = "fallbackdeleteHocPhi")
     public ApiResponse huyDangKyLTC(int maltc, String masv) {
         lopTinChiRepository.deleteSVDangKi(maltc, masv);
         Map<String, Object> mh = lopTinChiRepository.getMaMHFromLTC(maltc);
@@ -350,7 +351,11 @@ public class LopTinChiService {
     }
 
     public ApiResponse fallbackInsertHocPhi(int maltc, String masv, int soSVtoiDa, Throwable t) {
-        return new ApiResponse<String>(300, "Lưu môn học thất bại!", t.getMessage());
+        return new ApiResponse<>(300, "Đăng ký lớp tín chỉ thất bại!", null);
+    }
+
+    public ApiResponse fallbackdeleteHocPhi(int maltc, String masv, Throwable t) {
+        return new ApiResponse<>(300, "Huỷ đăng ký lớp tín chỉ thất bại!", null);
     }
 
 

@@ -73,4 +73,10 @@ public class LoginController {
         return taiKhoanService.thayDoiMatKhau(userInfo.get("username"), userInfo.get("password"),
                 userInfo.get("newpassword"));
     }
+
+    @GetMapping("thong-tin-user")
+    public ApiResponse layThongTinUser(@RequestParam("username") String username,
+            @RequestParam("role") String role) {
+        return taiKhoanService.getHoTenUser(username, role);
+    }
 }

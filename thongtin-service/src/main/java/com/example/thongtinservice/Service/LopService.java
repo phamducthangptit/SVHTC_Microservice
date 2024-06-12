@@ -7,17 +7,25 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.thongtinservice.DTO.ApiResponse;
 import com.example.thongtinservice.DTO.LopDTO;
+import com.example.thongtinservice.DTO.LopDTOService;
 import com.example.thongtinservice.Model.Lop;
 import com.example.thongtinservice.Model.MonHoc;
 import com.example.thongtinservice.Repository.LopRepository;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import reactor.core.publisher.Mono;
 
 @Service
 public class LopService {
     @Autowired
     private LopRepository lopRepository;
+
+    @Autowired
+    private WebClient.Builder webClient;
 
     public LopDTO mapLopDTO(Map<String, Object> lop, int stt) {
         LopDTO result = new LopDTO();
@@ -66,31 +74,79 @@ public class LopService {
         return new ApiResponse<List<LopDTO>>(200, "Lấy danh sách lớp học thành công!", dsLopDTO);
     }
 
+    @CircuitBreaker(name = "insertLopHoc", fallbackMethod = "fallbackInsertLopHoc")
     public ApiResponse themLop(Map<String, Object> data) {
         Integer kiemTraTrung = lopRepository.kiemTraLop((String) data.get("maLop"));
         if (kiemTraTrung == 1) {
             return new ApiResponse<>(203, "Lớp học đã tồn tại", null);
         }
-        // System.out.println("Check mon hoc");
-        // System.out.println(kiemTraTrung);
-        lopRepository.insertLop((String) data.get("maLop"), (String) data.get("tenLop"), (String) data.get("khoaHoc"),
-                (String) data.get("maKhoa"), (Integer) data.get("idHe"), (Boolean) data.get("trangThai"));
-        return new ApiResponse<>(200, "Thêm mới môn học thành công", null);
+        LopDTOService lop = new LopDTOService((String) data.get("maLop"), (String) data.get("tenLop"),
+                (String) data.get("maKhoa"));
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-lop-hoc")
+                .body(Mono.just(lop), LopDTOService.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        if (result.getCode() != 200) {
+            return new ApiResponse<>(300, "Có lỗi khi lưu lớp học!", null);
+        }
+        String khoaHoc = (String) data.get("khoaHoc1") + "-"
+                + (String) data.get("khoaHoc2");
+        lopRepository.insertLop((String) data.get("maLop"), (String) data.get("tenLop"), khoaHoc,
+                (String) data.get("maKhoa"), (Integer) data.get("idHe"), true);
+        return new ApiResponse<>(200, "Thêm mới lớp học thành công", null);
     }
 
+    public ApiResponse fallbackInsertLopHoc(Map<String, Object> data, Throwable t) {
+        return new ApiResponse<>(300, "Lưu môn học thất bại! " + t.getMessage(), null);
+    }
+
+    @CircuitBreaker(name = "updateLopHoc", fallbackMethod = "fallbackUpdateLopHoc")
     public ApiResponse updateLopHoc(Map<String, Object> data) {
-        lopRepository.updateLop((String) data.get("maLop"), (String) data.get("tenLop"), (String) data.get("khoaHoc"),
-                (String) data.get("maKhoa"), (Integer) data.get("idHe"), (Boolean) data.get("trangThai"));
-        return new ApiResponse<Object>(200, "Cập nhật môn học thành công", null);
+        LopDTOService lop = new LopDTOService((String) data.get("maLop"), (String) data.get("tenLop"),
+                (String) data.get("maKhoa"));
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/thay-doi-lop")
+                .body(Mono.just(lop), LopDTOService.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        if (result.getCode() != 200) {
+            return new ApiResponse<>(300, "Có lỗi khi cập nhật lớp học!", null);
+        }
+        String khoaHoc = (String) data.get("khoaHoc1") + "-"
+                + (String) data.get("khoaHoc2");
+        lopRepository.updateLop((String) data.get("maLop"), (String) data.get("tenLop"), khoaHoc,
+                (String) data.get("maKhoa"), (Integer) data.get("idHe"), true);
+        return new ApiResponse<Object>(200, "Cập nhật lớp học thành công", null);
     }
 
+    public ApiResponse fallbackUpdateLopHoc(Map<String, Object> data, Throwable t) {
+        return new ApiResponse<>(300, "Thay đổi lớp học thất bại! " + t.getMessage(), null);
+    }
+
+    @CircuitBreaker(name = "deleteLopHoc", fallbackMethod = "fallbackDeleteLopHoc")
     public ApiResponse deleteLopHoc(String maLop) {
         Integer kiemTraXoaLop = lopRepository.kiemTraXoaLop(maLop);
         if (kiemTraXoaLop == 1) {
-            return new ApiResponse<Object>(203, "Môn học đang được giảng dạy không thể xoá!", null);
+            return new ApiResponse<Object>(203, "Lớp học đang trong quá trình hoạt động, không thể xoá!", null);
+        }
+        Mono<ApiResponse> response = webClient.build().post()
+                .uri("http://lop-tin-chi-service/api/lop-tin-chi/xoa-lop-hoc")
+                .body(Mono.just(maLop), String.class)
+                .retrieve()
+                .bodyToMono(ApiResponse.class);
+        ApiResponse result = response.block();
+        if (result.getCode() != 200) {
+            return new ApiResponse<>(300, "Có lỗi khi xoá lớp học!", null);
         }
         lopRepository.deleteLopHoc(maLop);
-        return new ApiResponse<>(200, "Xoá môn học thành công", null);
+        return new ApiResponse<>(200, "Xoá lớp học thành công", null);
+    }
+
+    public ApiResponse fallbackDeleteLopHoc(String maLop, Throwable t) {
+        return new ApiResponse<>(300, "Xoá lớp học thất bại! " + t.getMessage(), null);
     }
 
     public List<Lop> getAllLop() {

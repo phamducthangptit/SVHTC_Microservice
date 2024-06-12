@@ -1,4 +1,5 @@
 package com.example.thongtinservice.Service;
+
 import com.example.thongtinservice.DTO.SinhVienDTO;
 import com.example.thongtinservice.Model.SinhVien;
 import com.example.thongtinservice.Repository.SinhVienRepository;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 @Service
 public class SinhVienService {
     @Autowired
@@ -31,7 +31,8 @@ public class SinhVienService {
     public int themSinhVienMoi(SinhVienDTO sinhVien, String password) {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         String newPass = encoder.encode(password);
-        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
+        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(), sinhVien.getHo(), sinhVien.getTen(),
+                sinhVien.getMalop());
         try {
             sinhVienRepository.themSinhVienMoi(
                     sinhVien.getMasv(),
@@ -44,7 +45,7 @@ public class SinhVienService {
                     sinhVien.getMalop(),
                     false,
                     sinhVien.getHinhanh(),
-                    sinhVien.getMasv().trim()+"@student.ptithcm.edu.vn",
+                    sinhVien.getMasv().trim() + "@student.ptithcm.edu.vn",
                     newPass);
             Mono<Integer> responseLTC = webClient.build().post()
                     .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-sv")
@@ -58,11 +59,13 @@ public class SinhVienService {
         }
         return 1;
     }
-    public int fallbackInsertSV(SinhVienDTO sinhVien,String password,  Throwable t) {
+
+    public int fallbackInsertSV(SinhVienDTO sinhVien, String password, Throwable t) {
         return 0;
     }
+
     @CircuitBreaker(name = "deleteSV", fallbackMethod = "fallbackDeleteSV")
-    public int xoaSinhVien(String masv){
+    public int xoaSinhVien(String masv) {
         try {
 
             sinhVienRepository.xoaSinhVien(masv);
@@ -79,12 +82,15 @@ public class SinhVienService {
         }
 
     }
-    public int fallbackDeleteSV(String masv,  Throwable t) {
+
+    public int fallbackDeleteSV(String masv, Throwable t) {
         return 0;
     }
+
     @CircuitBreaker(name = "updateSV", fallbackMethod = "fallbackUpdateSV")
     public int updateSinhVien(SinhVienDTO sinhVien) {
-        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(),sinhVien.getHo(),sinhVien.getTen(),sinhVien.getMalop());
+        SinhVienLTC svltc = new SinhVienLTC(sinhVien.getMasv(), sinhVien.getHo(), sinhVien.getTen(),
+                sinhVien.getMalop());
 
         try {
 
@@ -99,8 +105,7 @@ public class SinhVienService {
                     sinhVien.getMalop(),
                     sinhVien.getDanghihoc(),
                     sinhVien.getHinhanh(),
-                    sinhVien.getEmail()
-            );
+                    sinhVien.getEmail());
             Mono<Integer> responseLTC = webClient.build().post()
                     .uri("http://lop-tin-chi-service/api/lop-tin-chi/update-sv")
                     .body(Mono.just(svltc), SinhVienLTC.class)
@@ -113,17 +118,20 @@ public class SinhVienService {
         }
         return 1;
     }
-    public int fallbackUpdateSV(SinhVienDTO sinhVien,  Throwable t) {
+
+    public int fallbackUpdateSV(SinhVienDTO sinhVien, Throwable t) {
         return 0;
     }
-    public List<SinhVien> danhSachSVMaLop(String malop){
 
-        return  sinhVienRepository.danhSachSinhVien(malop);
+    public List<SinhVien> danhSachSVMaLop(String malop) {
+
+        return sinhVienRepository.danhSachSinhVien(malop);
     }
-    public List<String> locMaLop()
-    {
+
+    public List<String> locMaLop() {
         return sinhVienRepository.locMaLop();
     }
+
     public int updateDaNghiHoc(String masv) {
 
         try {
@@ -134,22 +142,19 @@ public class SinhVienService {
         }
         return 1;
     }
-    public SinhVienDTO timSinhVen(String masv)
-    {
+
+    public SinhVienDTO timSinhVen(String masv) {
         return sinhVienRepository.timSinhVien(masv);
     }
 
-
-
-
-    public Map<String, ?> thongTinCaNhanSV(String maSV){
+    public Map<String, ?> thongTinCaNhanSV(String maSV) {
         return sinhVienRepository.thongTinCaNhanSinhVien(maSV);
     }
 
-    public List<NienKhoaHocKi> getNienKhoaHocKi(String maSV){
+    public List<NienKhoaHocKi> getNienKhoaHocKi(String maSV) {
         List<NienKhoaHocKi> listNienKhoaHocKi = new ArrayList<>();
-        List<Object[]> resultCallSp =  sinhVienRepository.getNienKhoaHocKi(maSV);
-        for(Object[] result : resultCallSp){
+        List<Object[]> resultCallSp = sinhVienRepository.getNienKhoaHocKi(maSV);
+        for (Object[] result : resultCallSp) {
             NienKhoaHocKi nienKhoaHocKi = new NienKhoaHocKi();
             nienKhoaHocKi.setNienKhoa((String) result[0]);
             nienKhoaHocKi.setHocKi((int) result[1]);
@@ -158,21 +163,22 @@ public class SinhVienService {
         return listNienKhoaHocKi;
     }
 
-    public List<List<DiemTongKetResponse>> xemDiem(String maSV){
+    public List<List<DiemTongKetResponse>> xemDiem(String maSV) {
         List<NienKhoaHocKi> listNienKhoaHocKi = getNienKhoaHocKi(maSV);
-        if(!listNienKhoaHocKi.isEmpty()){
+        if (!listNienKhoaHocKi.isEmpty()) {
             List<Object[]> resultCallSp = sinhVienRepository.xemDiem(maSV);
             List<DiemTongKetResponse> listDiem = new ArrayList<>(); // danh sach tat ca diem
             List<List<DiemTongKetResponse>> listDiemLoc = new ArrayList<>();
-            for(Object[] result : resultCallSp){
+            for (Object[] result : resultCallSp) {
                 DiemTongKetResponse diemTongKetResponse = getDiemResponse(result);
                 listDiem.add(diemTongKetResponse);
             }
             // loc theo tung nienkhoa hocki
-            for(NienKhoaHocKi nienKhoaHocKi : listNienKhoaHocKi){
+            for (NienKhoaHocKi nienKhoaHocKi : listNienKhoaHocKi) {
                 List<DiemTongKetResponse> listDiemTmp = new ArrayList<>();
-                for(DiemTongKetResponse diemTongKetResponse : listDiem){
-                    if(diemTongKetResponse.getNienKhoa().equals(nienKhoaHocKi.getNienKhoa()) && (diemTongKetResponse.getHocKi() == nienKhoaHocKi.getHocKi())){
+                for (DiemTongKetResponse diemTongKetResponse : listDiem) {
+                    if (diemTongKetResponse.getNienKhoa().equals(nienKhoaHocKi.getNienKhoa())
+                            && (diemTongKetResponse.getHocKi() == nienKhoaHocKi.getHocKi())) {
                         listDiemTmp.add(diemTongKetResponse);
                     }
                 }
@@ -195,11 +201,12 @@ public class SinhVienService {
         diemTongKetResponse.setDiemCK((double) result[7]);
 
         // tinh diem tk
-        double diemTK = diemTongKetResponse.getDiemCC() * 0.1 + diemTongKetResponse.getDiemGK() * 0.3 + diemTongKetResponse.getDiemCK() * 0.6;
+
+        double diemTK = diemTongKetResponse.getDiemCC() * 0.1 + diemTongKetResponse.getDiemGK() * 0.3
+                + diemTongKetResponse.getDiemCK() * 0.6;
         double diemTKRounded = Math.round(diemTK * 100.0) / 100.0;
         diemTongKetResponse.setDiemTK10(diemTKRounded);
         diemTongKetResponse.setDiemTK4VaDiemTKC(diemTongKetResponse.getDiemTK10());
         return diemTongKetResponse;
     }
 }
-
