@@ -167,6 +167,7 @@ public class LopTinChiService {
                 lopTinChiResponse.setHocKi((int) re[2]);
                 lopTinChiResponse.setMaMH((String) re[3]);
                 lopTinChiResponse.setTenMH((String) re[4]);
+                lopTinChiResponse.setNhom((int) re[5]);
                 result.add(lopTinChiResponse);
             }
             return result;
