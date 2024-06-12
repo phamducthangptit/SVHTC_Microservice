@@ -53,48 +53,48 @@ public class DiemTongKetResponse {
         }
 
         if (diemTK10 >= 8.5 & diemTK10 < 9) {
-            this.diemTK4 = (float) 3.7;
+            this.diemTK4 = 3.7;
             this.diemTKC = "A";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 8 && diemTK10 < 8.5) {
-            this.diemTK4 = (float) 3.5;
+            this.diemTK4 = 3.5;
             this.diemTKC = "B+";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 7 && diemTK10 < 8) {
-            this.diemTK4 = (float) 3.0;
+            this.diemTK4 = 3.0;
             this.diemTKC = "B";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 6.5 && diemTK10 < 7) {
-            this.diemTK4 = (float) 2.5;
+            this.diemTK4 = 2.5;
             this.diemTKC = "C+";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 5.5 && diemTK10 < 6.5) {
-            this.diemTK4 = (float) 2.0;
+            this.diemTK4 = 2.0;
             this.diemTKC = "C";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 5 && diemTK10 < 5.5) {
-            this.diemTK4 = (float) 1.5;
+            this.diemTK4 = 1.5;
             this.diemTKC = "D+";
             this.ketQua = true;
         }
 
         if (diemTK10 >= 4 && diemTK10 < 5) {
-            this.diemTK4 = (float) 1.0;
+            this.diemTK4 = 1.0;
             this.diemTKC = "D";
             this.ketQua = true;
         }
         if (diemTK10 < 4) {
-            this.diemTK4 = (float) 0;
+            this.diemTK4 = 0;
             this.diemTKC = "F";
             this.ketQua = false;
         }

@@ -1,0 +1,118 @@
+services:
+
+  mysql-hocphi:
+    container_name: mysql-hocphi
+    image: mysql
+    environment:
+      MYSQL_DATABASE: qldsv_tc_hocphi
+      MYSQL_USER: ducthang
+      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    expose:
+      - "3307"
+    restart: unless-stopped
+
+  sqlserver-thongtin:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver-thongtin
+    environment:
+      MSSQL_SA_PASSWORD: "Password123@"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    expose:
+      - "1433"
+    volumes:
+      - sqlserverdata-thongtin:/var/opt/mssql
+    restart: unless-stopped
+
+  discovery-server:
+    image: ducthangptit/discovery-server:latest
+    container_name: discovery-server
+    pull_policy: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    image: ducthangptit/api-gateway:latest
+    container_name: api-gateway
+    pull_policy: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+    depends_on:
+      - discovery-server
+
+  thongtin-service:
+    container_name: thongtin-service
+    image: ducthangptit/thongtin-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver-thongtin:1433;databaseName=QLDSV_TC_THONGTIN;encrypt=true;trustServerCertificate=true;
+      - SPRING_DATASOURCE_USERNAME=SA
+      - SPRING_DATASOURCE_PASSWORD=Password123@
+    depends_on:
+      - sqlserver-thongtin
+      - discovery-server
+      - api-gateway
+
+  login-service:
+    container_name: login-service
+    image: ducthangptit/login-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver-thongtin:1433;databaseName=QLDSV_TC_THONGTIN;encrypt=true;trustServerCertificate=true;
+      - SPRING_DATASOURCE_USERNAME=SA
+      - SPRING_DATASOURCE_PASSWORD=Password123@
+    depends_on:
+      - sqlserver-thongtin
+      - discovery-server
+      - api-gateway
+
+  loptinchi-service:
+    container_name: loptinchi-service
+    image: ducthangptit/loptinchi-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver-thongtin:1433;databaseName=QLDSV_TC_LOPTINCHI;encrypt=true;trustServerCertificate=true;
+      - SPRING_DATASOURCE_USERNAME=SA
+      - SPRING_DATASOURCE_PASSWORD=Password123@
+    depends_on:
+      - sqlserver-thongtin
+      - discovery-server
+      - api-gateway
+
+  thanhtoanhocphi-service:
+    container_name: thanhtoanhocphi-service
+    image: ducthangptit/thanhtoanhocphi-service:latest
+    pull_policy: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-hocphi:3306/qldsv_tc_hocphi
+      - SPRING_DATASOURCE_USERNAME=ducthang
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - TZ=Asia/Ho_Chi_Minh
+    depends_on:
+      - mysql-hocphi
+      - discovery-server
+      - api-gateway
+volumes:
+  sqlserverdata-thongtin:
