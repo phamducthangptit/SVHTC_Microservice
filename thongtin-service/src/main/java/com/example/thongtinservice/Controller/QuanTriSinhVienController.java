@@ -168,6 +168,7 @@ public class QuanTriSinhVienController {
 
     @GetMapping(value = "get-img")
     public ResponseEntity<InputStreamResource> getImageDynamicType(@RequestParam("name") String name) {
+        System.out.println("ĐÃ GETIMG");
         MediaType contentType = MediaType.IMAGE_JPEG;
         InputStream in = getClass().getResourceAsStream("/img/" + name);
         return ResponseEntity.ok()
