@@ -65,6 +65,9 @@ public class LopTinChiService {
     public List<String> danhSachLopKhoa(String makhoa) {
         return lopTinChiRepository.danhSachLopKhoa(makhoa);
     }
+    public List<String> LTCSV(int maltc) {
+        return lopTinChiRepository.LTCSV(maltc);
+    }
 
     public List<String> locMaKhoa() {
         return lopTinChiRepository.locMaKhoa();
@@ -164,6 +167,7 @@ public class LopTinChiService {
                 lopTinChiResponse.setHocKi((int) re[2]);
                 lopTinChiResponse.setMaMH((String) re[3]);
                 lopTinChiResponse.setTenMH((String) re[4]);
+                lopTinChiResponse.setNhom((int) re[5]);
                 result.add(lopTinChiResponse);
             }
             return result;
@@ -354,7 +358,5 @@ public class LopTinChiService {
         return new ApiResponse<>(300, "Huỷ đăng ký lớp tín chỉ thất bại!", null);
     }
 
-    public List<String> LTCSV(int maltc) {
-        return lopTinChiRepository.LTCSV(maltc);
-    }
+
 }

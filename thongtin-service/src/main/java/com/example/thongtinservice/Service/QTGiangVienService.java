@@ -31,12 +31,7 @@ public class QTGiangVienService {
                 giangVien.getHo(),
                 giangVien.getTen(),giangVien.getMakhoa());
         try {
-            Mono<Integer> responseLTC = webClient.build().post()
-                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-gv")
-                    .body(Mono.just(gvltc), GiangVienLTC.class)
-                    .retrieve()
-                    .bodyToMono(Integer.class);
-            Integer resultLTC = responseLTC.block();
+
             giangVienRepository.themGiangVienMoi(
                     giangVien.getMagv(),
                     giangVien.getHo(),
@@ -49,6 +44,12 @@ public class QTGiangVienService {
                     giangVien.getMagv().trim()+"@ptithcm.edu.vn",
                     giangVien.getMakhoa(),
                     newPass            );
+            Mono<Integer> responseLTC = webClient.build().post()
+                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/them-gv")
+                    .body(Mono.just(gvltc), GiangVienLTC.class)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+            Integer resultLTC = responseLTC.block();
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
@@ -62,21 +63,21 @@ public class QTGiangVienService {
     public int xoaGiangVien(String magv){
 
         try {
+
+            giangVienRepository.xoaGiangVien(magv);
             Mono<Integer> responseLTC = webClient.build().post()
                     .uri("http://lop-tin-chi-service/api/lop-tin-chi/xoa-gv")
                     .body(Mono.just(magv), String.class)
                     .retrieve()
                     .bodyToMono(Integer.class);
             Integer resultLTC = responseLTC.block();
-            giangVienRepository.xoaGiangVien(magv);
-
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
         return 1;
     }
-    public int fallbackDeleteGV(String masv,Throwable t) {
+    public int fallbackDeleteGV(String magv,Throwable t) {
         return 0;
     }
     @CircuitBreaker(name = "updateGV", fallbackMethod = "fallbackUpdateGV")
@@ -86,12 +87,7 @@ public class QTGiangVienService {
                 giangVien.getHo(),
                 giangVien.getTen(),giangVien.getMakhoa());
         try {
-            Mono<Integer> responseLTC = webClient.build().post()
-                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/update-gv")
-                    .body(Mono.just(gvltc), GiangVienLTC.class)
-                    .retrieve()
-                    .bodyToMono(Integer.class);
-            Integer resultLTC = responseLTC.block();
+
             giangVienRepository.updateGiangVien(
                     giangVien.getMagv(),
                     giangVien.getHo(),
@@ -104,13 +100,19 @@ public class QTGiangVienService {
                     giangVien.getEmail(),
                     giangVien.getMakhoa()
             );
+            Mono<Integer> responseLTC = webClient.build().post()
+                    .uri("http://lop-tin-chi-service/api/lop-tin-chi/update-gv")
+                    .body(Mono.just(gvltc), GiangVienLTC.class)
+                    .retrieve()
+                    .bodyToMono(Integer.class);
+            Integer resultLTC = responseLTC.block();
         } catch (DataAccessException dataAccessException) {
             System.out.println(dataAccessException.getMessage());
             return 0;
         }
         return 1;
     }
-    public int fallbackUpdateGV(GiangVienDTO giangVien, String password,Throwable t) {
+    public int fallbackUpdateGV(GiangVienDTO giangVien, Throwable t) {
         return 0;
     }
     public GiangVienDTO mapGVDTO (Map<String , Object> gv)
