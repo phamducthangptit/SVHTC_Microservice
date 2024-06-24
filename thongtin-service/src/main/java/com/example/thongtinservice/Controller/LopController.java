@@ -1,11 +1,14 @@
 package com.example.thongtinservice.Controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.thongtinservice.DTO.ApiResponse;
 import com.example.thongtinservice.Service.HeService;
 import com.example.thongtinservice.Service.KhoaService;
@@ -42,6 +45,28 @@ public class LopController {
     @GetMapping("danh-sach-he")
     public ApiResponse getListHe() {
         return heService.getListHe();
+    }
+
+    @PostMapping("them-lop-moi")
+    public ApiResponse themLopMoi(@RequestBody Map<String, Object> data) {
+        System.out.println(data);
+        return lopService.themLop(data);
+    }
+
+    @PostMapping("thay-doi-lop")
+    public ApiResponse thayDoiLop(@RequestBody Map<String, Object> data) {
+        return lopService.updateLopHoc(data);
+    }
+
+    @GetMapping("xoa-lop-hoc")
+    public ApiResponse xoaLopHoc(@RequestParam("malop") String malop) {
+        return lopService.deleteLopHoc(malop);
+    }
+
+    @GetMapping("tim-lop-hoc")
+    public ApiResponse timLopHoc(@RequestParam("search") String search) {
+        System.out.println("check query: " + search);
+        return lopService.timLop(search);
     }
 
 }

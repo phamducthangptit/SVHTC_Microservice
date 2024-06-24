@@ -14,10 +14,15 @@ import java.util.Map;
 @Transactional
 public interface SinhVienRepo extends JpaRepository<SinhVien, String> {
 
-    @Query(value = "{call SP_XEM_HOC_PHI_SV (:masv)}", nativeQuery = true)
+    @Query(value = "{call SP_XEM_HOC_PHI_SV (:masvT)}", nativeQuery = true)
     List<Map<String,Object>> hocphiSV(
-            @Param("masv") String masv
+            @Param("masvT") String masv
     );
-    @Query(value = "{call SP_XEM_DSSV_HOC_PHI}", nativeQuery = true)
-    List<Map<String,Object>> DSSVhocphi();
+    @Query(value = "{call SP_XEM_DSSV_HOC_PHI(:nienkhoaT, :hockiT)}", nativeQuery = true)
+    List<Map<String,Object>> DSSVhocphi(
+            @Param("nienkhoaT") String nienkhoa,
+             @Param("hockiT") int hocki
+    );
+    @Query(value = "{call SP_LOC_NIEN_KHOA}", nativeQuery = true)
+    List<String> locNienKhoa();
 }

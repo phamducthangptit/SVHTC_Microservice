@@ -49,9 +49,9 @@ public class SinhVienService {
         else hocPhiSVDTO.setDadong((String) hp.get("dadong").toString());
         return hocPhiSVDTO;
     }
-    public List<HocPhiList> DSSVHP(){
+    public List<HocPhiList> DSSVHP( String nienkhoa,int hocki){
 
-        List<Map<String,Object>> data = repository.DSSVhocphi();
+        List<Map<String,Object>> data = repository.DSSVhocphi(nienkhoa,hocki);
         List<HocPhiList> hplist = new ArrayList<>();
         for (int i = 0 ; i< data.size();i++)
         {
@@ -59,5 +59,9 @@ public class SinhVienService {
             hplist.add(temp);
         }
         return  hplist;
+    }
+    public List<String> locNienKhoa(){
+
+        return  repository.locNienKhoa();
     }
 }

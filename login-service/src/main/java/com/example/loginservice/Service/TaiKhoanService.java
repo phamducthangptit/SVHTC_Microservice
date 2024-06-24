@@ -1,5 +1,6 @@
 package com.example.loginservice.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +67,15 @@ public class TaiKhoanService {
 
     public String getRoleUser(String username) {
         return taiKhoanRepository.getRoleTaiKhoan(username);
+    }
+
+    public ApiResponse getHoTenUser(String username, String role) {
+        Map<String, String> result = new HashMap<>();
+        if (role.equals("GIANGVIEN")) {
+            result = taiKhoanRepository.getHoTenGV(username);
+        } else {
+            result = taiKhoanRepository.getHoTenSV(username);
+        }
+        return new ApiResponse<Map<String, String>>(200, "Lấy thông tin thành công", result);
     }
 }
