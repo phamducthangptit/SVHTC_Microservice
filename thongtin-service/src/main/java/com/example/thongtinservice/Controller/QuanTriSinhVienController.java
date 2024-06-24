@@ -4,6 +4,7 @@ import com.example.thongtinservice.DTO.SinhVienDTO;
 import com.example.thongtinservice.Model.SinhVien;
 import com.example.thongtinservice.Service.SinhVienService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.tools.javac.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -62,7 +63,9 @@ public class QuanTriSinhVienController {
                 currentDateTime.getMinute() + "m" +
                 currentDateTime.getSecond() + "s" + ".jpg";
         sinhvien.setHinhanh(fileName);
-        Path root = Paths.get("thongtin-service/src/main/resources/img");
+        ClassLoader classLoader = getClass().getClassLoader();
+        java.net.URL resource = classLoader.getResource("img");
+        Path root = Paths.get(resource.getPath());
         try {
             Files.copy(file.getInputStream(), root.resolve(fileName));
         } catch (Exception e) {
@@ -103,7 +106,9 @@ public class QuanTriSinhVienController {
                 currentDateTime.getMinute() + "m" +
                 currentDateTime.getSecond() + "s" + ".jpg";
         sinhvien.setHinhanh(fileName);
-        Path root = Paths.get("thongtin-service/src/main/resources/img");
+        ClassLoader classLoader = getClass().getClassLoader();
+        java.net.URL resource = classLoader.getResource("img");
+        Path root = Paths.get(resource.getPath());
         try {
             Files.copy(file.getInputStream(), root.resolve(fileName));
         } catch (Exception e) {

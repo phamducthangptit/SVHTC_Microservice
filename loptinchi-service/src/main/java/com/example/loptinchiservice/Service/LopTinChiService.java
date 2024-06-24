@@ -242,7 +242,7 @@ public class LopTinChiService {
             int svdaDK = getSoLuongDaDKTheoMaLTC(ltc.getMaLTC());
             ltc.setConLai(ltc.getSoSVToiDa() - svdaDK);
             for (int j = 0; j < data1.size(); j++) {
-                if ((Integer) data1.get(j).get("MALTC") == ltc.getMaLTC()) {
+                if (Integer.parseInt(data1.get(j).get("MALTC").toString()) == ltc.getMaLTC()) {
                     ltc.setActive(true);
                     break;
                 }

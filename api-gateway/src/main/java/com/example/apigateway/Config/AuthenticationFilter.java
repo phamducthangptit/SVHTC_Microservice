@@ -40,6 +40,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
             "user/valid",
             "user/quen-mat-khau",
             "thong-tin/sinh-vien/get-img"
+            , "thong-tin/giang-vien/get-img"
     };
 
     private String apiPrefix = "/api/";

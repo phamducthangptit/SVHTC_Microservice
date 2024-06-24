@@ -69,7 +69,9 @@ public class QuanTriGiangVienController {
                 currentDateTime.getMinute() + "m" +
                 currentDateTime.getSecond() + "s" + ".jpg";
         giangvien.setHinhanh(fileName);
-        Path root = Paths.get("thongtin-service/src/main/resources/img");
+        ClassLoader classLoader = getClass().getClassLoader();
+        java.net.URL resource = classLoader.getResource("img");
+        Path root = Paths.get(resource.getPath());
         try {
             Files.copy(file.getInputStream(), root.resolve(fileName));
         } catch (Exception e) {
@@ -110,7 +112,10 @@ public class QuanTriGiangVienController {
                 currentDateTime.getMinute() + "m" +
                 currentDateTime.getSecond() + "s" + ".jpg";
         giangvien.setHinhanh(fileName);
-        Path root = Paths.get("thongtin-service/src/main/resources/img");
+        ClassLoader classLoader = getClass().getClassLoader();
+        java.net.URL resource = classLoader.getResource("img");
+        Path root = Paths.get(resource.getPath());
+        System.out.println(root);
         try {
             Files.copy(file.getInputStream(), root.resolve(fileName));
         } catch (Exception e) {
